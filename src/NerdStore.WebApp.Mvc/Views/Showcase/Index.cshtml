@@ -1,0 +1,32 @@
+﻿@model IEnumerable<ProductViewModel>
+
+@{
+    ViewData["Title"] = "Product Showcase";
+}
+
+<section class="row text-center">
+    <div class="col-md-8 mx-auto">
+        <h1 class="fw-light">Product Showcase</h1>
+    </div>
+</section>
+
+<div class="row row-cols-1 row-cols-md-3 g-2 py-3">
+    @foreach (var product in Model.OrderBy(product => product.CategoryId))
+    {
+        <div class="col">
+            <div class="card h-100 shadow-sm">
+                <a asp-controller="Showcase" asp-action="ProductDetails" asp-route-productid="@product.Id" class="d-flex justify-content-center">
+                    <img width="200" height="200" src="~/images/@product.Image" alt="@product.Name" />
+                </a>
+                <div class="card-body">
+                    <h5 class="card-title">@product.Name</h5>
+                    <h6 class="card-subtitle mb-2 text-muted">@product.QuantityInStock in stock</h6>
+                    <p class="card-text">@product.Description</p>
+                    <div class="d-flex justify-content-end">
+                        <small class="text-muted">@product.Price.ToString("c2")</small>
+                    </div>
+                </div>
+            </div>
+        </div>
+    }
+</div>

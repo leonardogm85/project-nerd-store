@@ -1,0 +1,37 @@
+﻿@model IEnumerable<ProductViewModel>
+
+@{
+    ViewData["Title"] = "Product List";
+}
+
+<section class="row text-center">
+    <div class="col-md-8 mx-auto">
+        <h1 class="fw-light">Administer Products</h1>
+        <p>
+            <a asp-controller="Products" asp-action="AddProduct" class="btn btn-outline-primary my-2">Add Product</a>
+        </p>
+    </div>
+</section>
+
+<div class="row row-cols-1 row-cols-md-3 g-2 py-3">
+    @foreach (var product in Model.OrderBy(product => product.CategoryId))
+    {
+        <div class="col">
+            <div class="card h-100 shadow-sm">
+                <img class="align-self-center" width="200" height="200" src="~/images/@product.Image" alt="@product.Name" />
+                <div class="card-body">
+                    <h5 class="card-title">@product.Name</h5>
+                    <h6 class="card-subtitle mb-2 text-muted">@product.QuantityInStock in stock</h6>
+                    <p class="card-text">@product.Description</p>
+                    <div class="d-flex justify-content-between align-items-center">
+                        <div class="btn-group">
+                            <a asp-controller="Products" asp-action="UpdateProduct" asp-route-productid="@product.Id" class="btn btn-sm btn-outline-secondary">Update Product</a>
+                            <a asp-controller="Products" asp-action="ChangeStock" asp-route-productid="@product.Id" class="btn btn-sm btn-outline-secondary">Change Stock</a>
+                        </div>
+                        <small class="text-muted">@product.Price.ToString("c2")</small>
+                    </div>
+                </div>
+            </div>
+        </div>
+    }
+</div>

@@ -1,0 +1,65 @@
+﻿@model ProductViewModel
+
+@{
+    ViewData["Title"] = "Product Details";
+}
+
+<section class="row text-center">
+    <div class="col-md-8 mx-auto">
+        <h1 class="fw-light">Product Details</h1>
+        <p>
+            <a asp-controller="Showcase" asp-action="Index" class="btn btn-outline-secondary my-2">Back To Product Showcase</a>
+        </p>
+    </div>
+</section>
+
+<div class="row row-cols-1 row-cols-md-2 justify-content-md-center g-2 py-3">
+    <div class="col">
+        <div class="card h-100 shadow-sm">
+            <img class="align-self-center" width="250" height="250" src="~/images/@Model.Image" alt="@Model.Name" />
+            <div class="card-body">
+                <h5 class="card-title">@Model.Name</h5>
+                <div class="d-flex justify-content-between align-items-center">
+                    <h6 class="card-subtitle mb-2 text-muted">@Model.QuantityInStock in stock</h6>
+                    <small class="text-muted">@Model.Price.ToString("c2")</small>
+                </div>
+                <p class="card-text">@Model.Description</p>
+
+                <form class="row py-2" asp-controller="" asp-action="">
+                    <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+
+                    <input type="hidden" id="ProductId" name="ProductId" value="@Model.Id" />
+
+                    <div class="col-md-12">
+                        <div class="input-group">
+                            <div class="form-floating">
+                                <input class="form-control"
+                                       type="number"
+                                       id="Quantity"
+                                       name="Quantity"
+                                       placeholder="Provide a quantity"
+                                       data-val="true"
+                                       data-val-required="The quantity must be provided."
+                                       data-val-range-min="1"
+                                       data-val-range-max="999999"
+                                       data-val-range="The quantity must be greater than 0 and less than 1,000,000." />
+                                <label for="Quantity">Quantity</label>
+                            </div>
+                            <button class="btn btn-secondary" type="submit">Add Product To Cart</button>
+                        </div>
+                    </div>
+
+                    <div class="col-md-12">
+                        <span class="text-danger" data-valmsg-for="Quantity" data-valmsg-replace="true"></span>
+                    </div>
+                </form>
+
+            </div>
+        </div>
+    </div>
+</div>
+
+@section Scripts
+{
+    @{ await Html.RenderPartialAsync("_ValidationScriptsPartial"); }
+}
