@@ -28,5 +28,7 @@
         }
 
         public static bool operator !=(Entity? entityA, Entity? entityB) => !(entityA == entityB);
+
+        public virtual bool IsValid() => throw new NotImplementedException();
     }
 }
