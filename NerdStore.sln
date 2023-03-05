@@ -27,11 +27,11 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "NerdStore.WebApp.Mvc", "src
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Orders", "Orders", "{580289F7-FD33-4EDA-AE21-05C91AE0606E}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "NerdStore.Orders.Domain", "src\NerdStore.Orders.Domain\NerdStore.Orders.Domain.csproj", "{2CBD9ED8-9E0C-49E5-8C1B-B3118C4677E0}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "NerdStore.Orders.Domain", "src\NerdStore.Orders.Domain\NerdStore.Orders.Domain.csproj", "{2CBD9ED8-9E0C-49E5-8C1B-B3118C4677E0}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "NerdStore.Orders.Application", "src\NerdStore.Orders.Application\NerdStore.Orders.Application.csproj", "{63D7B501-91C5-4A76-9C53-741AA6A030EE}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "NerdStore.Orders.Application", "src\NerdStore.Orders.Application\NerdStore.Orders.Application.csproj", "{63D7B501-91C5-4A76-9C53-741AA6A030EE}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "NerdStore.Orders.Data", "src\NerdStore.Orders.Data\NerdStore.Orders.Data.csproj", "{5D09D682-23FA-46AE-821D-99922491427B}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "NerdStore.Orders.Data", "src\NerdStore.Orders.Data\NerdStore.Orders.Data.csproj", "{5D09D682-23FA-46AE-821D-99922491427B}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution

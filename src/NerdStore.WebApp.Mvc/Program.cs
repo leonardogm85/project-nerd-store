@@ -39,7 +39,7 @@ builder.Services
     .AddAutoMapper(typeof(DomainToViewModelMappingProfile), typeof(ViewModelToDomainMappingProfile));
 
 builder.Services
-    .AddMediatR(typeof(Program));
+    .AddMediatR(configuration => configuration.RegisterServicesFromAssembly(typeof(Program).Assembly));
 
 builder.Services
     .AddServices();

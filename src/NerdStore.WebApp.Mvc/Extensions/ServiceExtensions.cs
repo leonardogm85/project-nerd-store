@@ -9,6 +9,7 @@ using NerdStore.Catalog.Domain.Interfaces.Repositories;
 using NerdStore.Catalog.Domain.Interfaces.Services;
 using NerdStore.Catalog.Domain.Services;
 using NerdStore.Core.Mediator;
+using NerdStore.Orders.Application.Commands;
 
 namespace NerdStore.WebApp.Mvc.Extensions
 {
@@ -25,6 +26,9 @@ namespace NerdStore.WebApp.Mvc.Extensions
             services.AddScoped<IProductAppService, ProductAppService>();
             services.AddScoped<CatalogContext>();
             services.AddScoped<INotificationHandler<ProductWithLowStockEvent>, ProductEventHandler>();
+
+            // Order
+            services.AddScoped<IRequestHandler<AddItemCommand, bool>, OrderCommandHandler>();
         }
     }
 }
