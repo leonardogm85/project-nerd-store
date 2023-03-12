@@ -11,8 +11,8 @@ namespace NerdStore.Catalog.Data.Context
         {
         }
 
-        public DbSet<Product> Products { get; private set; }
-        public DbSet<Category> Categories { get; private set; }
+        public DbSet<Product> Products => Set<Product>();
+        public DbSet<Category> Categories => Set<Category>();
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {

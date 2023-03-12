@@ -1,29 +1,81 @@
 ﻿using MediatR;
 using NerdStore.Core.Messages;
+using NerdStore.Orders.Domain.Entities;
+using NerdStore.Orders.Domain.Interfaces.Repositories;
 
 namespace NerdStore.Orders.Application.Commands
 {
     public class OrderCommandHandler
         : IRequestHandler<AddItemCommand, bool>
     {
-        public async Task<bool> Handle(AddItemCommand request, CancellationToken cancellationToken)
+        private readonly IOrderRepository _orderRepository;
+
+        public OrderCommandHandler(IOrderRepository orderRepository)
         {
-            if (!IsValid(request))
+            _orderRepository = orderRepository;
+        }
+
+        public async Task<bool> Handle(AddItemCommand command, CancellationToken cancellationToken)
+        {
+            if (!IsValid(command))
             {
                 return false;
             }
 
-            return true;
+            var order = await _orderRepository.GetDraftOrderByClientIdAsync(command.ClientId);
+
+            if (order is null)
+            {
+                order = Order.Factory.NewDraftOrder(command.ClientId);
+
+                var item = new Item(
+                    order.Id,
+                    command.ProductId,
+                    command.ProductName,
+                    command.Quantity,
+                    command.Price);
+
+                order.AddItem(item);
+
+                _orderRepository.AddOrder(order);
+            }
+            else
+            {
+                var item = new Item(
+                    order.Id,
+                    command.ProductId,
+                    command.ProductName,
+                    command.Quantity,
+                    command.Price);
+
+                var existingItem = order.Items
+                    .FirstOrDefault(i => i.ProductId == item.ProductId);
+
+                order.AddItem(item);
+
+                if (existingItem is null)
+                {
+                    _orderRepository.AddItem(item);
+                }
+                else
+                {
+                    _orderRepository.UpdateItem(existingItem);
+                }
+
+                _orderRepository.UpdateOrder(order);
+            }
+
+            return await _orderRepository.UnitOfWork.CommitAsync();
         }
 
-        private bool IsValid(Command request)
+        private bool IsValid(Command command)
         {
-            if (request.IsValid())
+            if (command.IsValid())
             {
                 return true;
             }
 
-            foreach (var error in request.ValidationResult.Errors)
+            foreach (var error in command.ValidationResult.Errors)
             {
                 // TODO: Throw event
             }

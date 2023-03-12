@@ -5,13 +5,13 @@ namespace NerdStore.Orders.Application.Commands
 {
     public class AddItemCommand : Command
     {
-        public Guid ClientId { get; }
-        public Guid ProductId { get; }
-        public string ProductName { get; }
-        public int Quantity { get; }
-        public double Price { get; }
+        public Guid ClientId { get; private set; }
+        public Guid ProductId { get; private set; }
+        public string ProductName { get; private set; }
+        public int Quantity { get; private set; }
+        public double Price { get; private set; }
 
-        public AddItemCommand(Guid aggregateId, Guid clientId, Guid productId, string productName, int quantity, double price) : base(aggregateId)
+        public AddItemCommand(Guid clientId, Guid productId, string productName, int quantity, double price) : base(clientId)
         {
             ClientId = clientId;
             ProductId = productId;

@@ -1,9 +1,9 @@
-using MediatR;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Localization;
 using Microsoft.EntityFrameworkCore;
 using NerdStore.Catalog.Application.AutoMapper;
 using NerdStore.Catalog.Data.Context;
+using NerdStore.Orders.Data.Context;
 using NerdStore.WebApp.Mvc.Data;
 using NerdStore.WebApp.Mvc.Extensions;
 using System.Globalization;
@@ -20,6 +20,9 @@ builder.Services
 
 builder.Services
     .AddDbContext<CatalogContext>(options => options.UseSqlServer(connectionString));
+
+builder.Services
+    .AddDbContext<OrderContext>(options => options.UseSqlServer(connectionString));
 
 builder.Services
     .AddDatabaseDeveloperPageExceptionFilter();

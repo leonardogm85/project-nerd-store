@@ -116,7 +116,7 @@ namespace NerdStore.Orders.Domain.Entities
 
         public void CancelOrder() => Status = Status.Canceled;
 
-        public static class OrderFactory
+        public static class Factory
         {
             public static Order NewDraftOrder(Guid clientId)
             {

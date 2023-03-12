@@ -14,6 +14,6 @@ namespace NerdStore.Orders.Domain.Entities
         public bool Active { get; private set; }
         public bool Used { get; private set; }
 
-        public IEnumerable<Order> Orders { get; private set; }
+        public IList<Order> Orders { get; private set; }
     }
 }

@@ -10,9 +10,9 @@ namespace NerdStore.Catalog.Data.Repositories
     {
         private readonly CatalogContext _context;
 
-        public IUnitOfWork UnitOfWork => _context;
-
         public ProductRepository(CatalogContext context) => _context = context;
+
+        public IUnitOfWork UnitOfWork => _context;
 
         public async Task<IEnumerable<Product>> GetAllProductsAsync()
         {
