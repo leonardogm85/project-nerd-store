@@ -1,5 +1,7 @@
 ﻿using MediatR;
+using NerdStore.Core.Communication.Mediator;
 using NerdStore.Core.Messages;
+using NerdStore.Core.Messages.CommonMessages.DomainNotifications;
 using NerdStore.Orders.Domain.Entities;
 using NerdStore.Orders.Domain.Interfaces.Repositories;
 
@@ -9,15 +11,17 @@ namespace NerdStore.Orders.Application.Commands
         : IRequestHandler<AddItemCommand, bool>
     {
         private readonly IOrderRepository _orderRepository;
+        private readonly IMediatorHandler _mediatorHandler;
 
-        public OrderCommandHandler(IOrderRepository orderRepository)
+        public OrderCommandHandler(IOrderRepository orderRepository, IMediatorHandler mediatorHandler)
         {
             _orderRepository = orderRepository;
+            _mediatorHandler = mediatorHandler;
         }
 
         public async Task<bool> Handle(AddItemCommand command, CancellationToken cancellationToken)
         {
-            if (!IsValid(command))
+            if (!await IsValidAsync(command))
             {
                 return false;
             }
@@ -68,7 +72,7 @@ namespace NerdStore.Orders.Application.Commands
             return await _orderRepository.UnitOfWork.CommitAsync();
         }
 
-        private bool IsValid(Command command)
+        private async Task<bool> IsValidAsync(Command command)
         {
             if (command.IsValid())
             {
@@ -77,7 +81,7 @@ namespace NerdStore.Orders.Application.Commands
 
             foreach (var error in command.ValidationResult.Errors)
             {
-                // TODO: Throw event
+                await _mediatorHandler.PublishNotificationAsync(new DomainNotification(command.MessageType, error.ErrorMessage));
             }
 
             return false;

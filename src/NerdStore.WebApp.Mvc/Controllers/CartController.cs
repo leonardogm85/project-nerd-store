@@ -1,17 +1,22 @@
-﻿using Microsoft.AspNetCore.Mvc;
+﻿using MediatR;
+using Microsoft.AspNetCore.Mvc;
 using NerdStore.Catalog.Application.Interfaces;
-using NerdStore.Core.Mediator;
+using NerdStore.Core.Communication.Mediator;
+using NerdStore.Core.Messages.CommonMessages.DomainNotifications;
 using NerdStore.Orders.Application.Commands;
 
 namespace NerdStore.WebApp.Mvc.Controllers
 {
-    [Route("carts")]
+    [Route("cart")]
     public class CartController : ControllerBase
     {
-        private readonly IMediatorHandler _mediatorHandler;
         private readonly IProductAppService _productAppService;
+        private readonly IMediatorHandler _mediatorHandler;
 
-        public CartController(IMediatorHandler mediatorHandler, IProductAppService productAppService)
+        public CartController(
+            IProductAppService productAppService,
+            IMediatorHandler mediatorHandler,
+            INotificationHandler<DomainNotification> domainNotificationHandler) : base(mediatorHandler, domainNotificationHandler)
         {
             _mediatorHandler = mediatorHandler;
             _productAppService = productAppService;
@@ -35,10 +40,10 @@ namespace NerdStore.WebApp.Mvc.Controllers
 
             if (product.QuantityInStock < quantity)
             {
-                ViewData["Error"] = "Insufficient stock.";
+                TempData["Error"] = "Insufficient stock.";
                 return RedirectToAction(
-                    nameof(ShowcaseController.ProductDetails),
-                    nameof(ShowcaseController),
+                    "ProductDetails",
+                    "Showcase",
                     new { productId });
             }
 
@@ -51,12 +56,17 @@ namespace NerdStore.WebApp.Mvc.Controllers
 
             await _mediatorHandler.SendCommandAsync(command);
 
-            // TODO: Get result
+            if (IsValid())
+            {
+                return RedirectToAction(
+                    "Cart",
+                    "Index");
+            }
 
-            ViewData["Error"] = "Insufficient Unavailable.";
+            TempData["Errors"] = GetErrorMessages();
             return RedirectToAction(
-                nameof(ShowcaseController.ProductDetails),
-                nameof(ShowcaseController),
+                "ProductDetails",
+                "Showcase",
                 new { productId });
         }
     }

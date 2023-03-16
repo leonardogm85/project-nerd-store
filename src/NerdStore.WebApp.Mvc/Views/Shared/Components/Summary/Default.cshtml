@@ -1,0 +1,40 @@
+﻿@if (!ViewData.ModelState.IsValid)
+{
+    <div class="alert alert-danger alert-dismissible fade show" role="alert">
+        <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+        <h3>Oops, an error occurred!</h3>
+        <br />
+        <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+    </div>
+}
+
+@if (TempData["Error"] is not null)
+{
+    <div class="alert alert-danger alert-dismissible fade show" role="alert">
+        <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+        <h3>Oops, an error occurred!</h3>
+        <br />
+        <p>@TempData["Error"]</p>
+    </div>
+}
+
+@if (TempData["Errors"] is not null)
+{
+    <div class="alert alert-danger alert-dismissible fade show" role="alert">
+        <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+        <h3>Oops, an error occurred!</h3>
+        <br />
+        @foreach (var error in (IEnumerable<string>)TempData["Errors"]!)
+        {
+            <p>@error</p>
+        }
+    </div>
+}
+
+@if (ViewData["Success"] is not null)
+{
+    <div class="alert alert-success alert-dismissible fade show" role="alert">
+        <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+        <h3>@ViewData["Success"]</h3>
+    </div>
+}
