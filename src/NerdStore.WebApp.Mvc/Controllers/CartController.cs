@@ -59,8 +59,8 @@ namespace NerdStore.WebApp.Mvc.Controllers
             if (IsValid())
             {
                 return RedirectToAction(
-                    "Cart",
-                    "Index");
+                    "Index",
+                    "Cart");
             }
 
             TempData["Errors"] = GetErrorMessages();

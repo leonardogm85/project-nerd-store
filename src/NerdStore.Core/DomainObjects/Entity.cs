@@ -1,8 +1,12 @@
-﻿namespace NerdStore.Core.DomainObjects
+﻿using NerdStore.Core.Messages;
+
+namespace NerdStore.Core.DomainObjects
 {
     public abstract class Entity
     {
-        public Guid Id { get; }
+        private readonly List<Event> _events = new();
+
+        public Guid Id { get; private set; }
 
         public Entity() => Id = Guid.NewGuid();
 
@@ -30,5 +34,30 @@
         public static bool operator !=(Entity? entityA, Entity? entityB) => !(entityA == entityB);
 
         public virtual bool IsValid() => throw new NotImplementedException();
+
+        public void AddEvent(Event @event)
+        {
+            _events.Add(@event);
+        }
+
+        public void RemoveEvent(Event @event)
+        {
+            _events.Remove(@event);
+        }
+
+        public IReadOnlyList<Event> GetEvents()
+        {
+            return _events.AsReadOnly();
+        }
+
+        public void RemoveEvents()
+        {
+            _events.Clear();
+        }
+
+        public bool HasEvents()
+        {
+            return _events.Any();
+        }
     }
 }

@@ -1,5 +1,7 @@
 ﻿using Microsoft.EntityFrameworkCore;
+using NerdStore.Core.Communication.Mediator;
 using NerdStore.Core.Data;
+using NerdStore.Orders.Data.Extensions;
 using NerdStore.Orders.Data.Mappings;
 using NerdStore.Orders.Domain.Entities;
 
@@ -7,8 +9,11 @@ namespace NerdStore.Orders.Data.Context
 {
     public class OrderContext : DbContext, IUnitOfWork
     {
-        public OrderContext(DbContextOptions<OrderContext> options) : base(options)
+        private readonly IMediatorHandler _mediatorHandler;
+
+        public OrderContext(DbContextOptions<OrderContext> options, IMediatorHandler mediatorHandler) : base(options)
         {
+            _mediatorHandler = mediatorHandler;
         }
 
         public DbSet<Order> Orders => Set<Order>();
@@ -31,7 +36,14 @@ namespace NerdStore.Orders.Data.Context
 
         public async Task<bool> CommitAsync()
         {
-            return await SaveChangesAsync() > 0;
+            if (await SaveChangesAsync() > 0)
+            {
+                await _mediatorHandler.PublishEventsAsync(this);
+
+                return true;
+            }
+
+            return false;
         }
     }
 }
