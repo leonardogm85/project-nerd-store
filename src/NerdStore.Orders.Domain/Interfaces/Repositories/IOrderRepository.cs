@@ -8,6 +8,7 @@ namespace NerdStore.Orders.Domain.Interfaces.Repositories
         Task<Order?> GetOrderByIdAsync(Guid orderId);
         Task<Order?> GetDraftOrderByClientIdAsync(Guid clientId);
         Task<IEnumerable<Order>> GetAllOrdersByClientIdAsync(Guid clientId);
+        Task<IEnumerable<Order>> GetAllPaidAndCanceledOrdersByClientIdAsync(Guid clientId);
         void AddOrder(Order order);
         void UpdateOrder(Order order);
 

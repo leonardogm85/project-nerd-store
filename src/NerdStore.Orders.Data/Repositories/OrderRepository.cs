@@ -41,6 +41,15 @@ namespace NerdStore.Orders.Data.Repositories
                 .ToListAsync();
         }
 
+        public async Task<IEnumerable<Order>> GetAllPaidAndCanceledOrdersByClientIdAsync(Guid clientId)
+        {
+            return await _context
+                .Orders
+                .AsNoTracking()
+                .Where(o => o.ClientId == clientId && (o.Status == Status.Paid || o.Status == Status.Canceled))
+                .ToListAsync();
+        }
+
         public void AddOrder(Order order) => _context.Orders.Add(order);
 
         public void UpdateOrder(Order order) => _context.Orders.Update(order);

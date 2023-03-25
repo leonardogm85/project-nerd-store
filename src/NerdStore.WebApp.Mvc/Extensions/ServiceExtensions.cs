@@ -12,6 +12,7 @@ using NerdStore.Core.Communication.Mediator;
 using NerdStore.Core.Messages.CommonMessages.DomainNotifications;
 using NerdStore.Orders.Application.Commands;
 using NerdStore.Orders.Application.Events;
+using NerdStore.Orders.Application.Queries;
 using NerdStore.Orders.Data.Context;
 using NerdStore.Orders.Data.Repositories;
 using NerdStore.Orders.Domain.Interfaces.Repositories;
@@ -35,6 +36,7 @@ namespace NerdStore.WebApp.Mvc.Extensions
 
             // Order
             services.AddScoped<IOrderRepository, OrderRepository>();
+            services.AddScoped<IOrderQuery, OrderQuery>();
             services.AddScoped<OrderContext>();
             services.AddScoped<IRequestHandler<AddItemCommand, bool>, OrderCommandHandler>();
             services.AddScoped<INotificationHandler<DraftOrderStartedEvent>, OrderEventHandler>();
