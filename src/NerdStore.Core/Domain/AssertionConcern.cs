@@ -1,8 +1,8 @@
 ﻿using System.Text.RegularExpressions;
 
-namespace NerdStore.Core.DomainObjects
+namespace NerdStore.Core.Domain
 {
-    public class AssertionConcern
+    public static class AssertionConcern
     {
         public static void AssertArgumentEquals(object object1, object object2, string message)
         {

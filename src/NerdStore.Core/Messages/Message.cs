@@ -2,8 +2,8 @@
 {
     public abstract class Message
     {
-        public string MessageType { get; private set; }
-        public Guid AggregateId { get; private set; }
+        public Guid AggregateId { get; }
+        public string MessageType { get; }
 
         protected Message(Guid aggregateId)
         {

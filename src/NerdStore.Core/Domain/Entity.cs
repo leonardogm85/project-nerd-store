@@ -1,39 +1,46 @@
 ﻿using NerdStore.Core.Messages;
 
-namespace NerdStore.Core.DomainObjects
+namespace NerdStore.Core.Domain
 {
-    public abstract class Entity
+    public abstract class Entity : INotifiable
     {
         private readonly List<Event> _events = new();
 
         public Guid Id { get; private set; }
 
-        public Entity() => Id = Guid.NewGuid();
-
-        public override bool Equals(object? obj) => obj is Entity entity && ReferenceEquals(this, entity) && Id.Equals(entity.Id);
-
-        public override int GetHashCode() => HashCode.Combine(Id);
-
-        public override string ToString() => $"{GetType().Name} [Id={Id}]";
-
-        public static bool operator ==(Entity? entityA, Entity? entityB)
+        protected Entity()
         {
-            if (entityA is null)
-            {
-                if (entityB is null)
-                {
-                    return true;
-                }
-
-                return false;
-            }
-
-            return entityA.Equals(entityB);
+            Id = Guid.NewGuid();
         }
 
-        public static bool operator !=(Entity? entityA, Entity? entityB) => !(entityA == entityB);
+        public override bool Equals(object? obj)
+        {
+            return obj is Entity entity
+                &&
+                ReferenceEquals(this, entity)
+                &&
+                Id.Equals(entity.Id);
+        }
 
-        public virtual bool IsValid() => throw new NotImplementedException();
+        public override int GetHashCode()
+        {
+            return HashCode.Combine(Id);
+        }
+
+        public override string ToString()
+        {
+            return $"{GetType().Name} [Id={Id}]";
+        }
+
+        public IReadOnlyCollection<Event> GetEvents()
+        {
+            return _events;
+        }
+
+        public bool HasEvents()
+        {
+            return _events.Any();
+        }
 
         public void AddEvent(Event @event)
         {
@@ -45,19 +52,9 @@ namespace NerdStore.Core.DomainObjects
             _events.Remove(@event);
         }
 
-        public IReadOnlyList<Event> GetEvents()
-        {
-            return _events.AsReadOnly();
-        }
-
-        public void RemoveEvents()
+        public void ClearEvents()
         {
             _events.Clear();
-        }
-
-        public bool HasEvents()
-        {
-            return _events.Any();
         }
     }
 }

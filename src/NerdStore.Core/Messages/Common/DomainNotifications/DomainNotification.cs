@@ -1,22 +1,24 @@
 ﻿using MediatR;
 
-namespace NerdStore.Core.Messages.CommonMessages.DomainNotifications
+namespace NerdStore.Core.Messages.Common.DomainNotifications
 {
-    public class DomainNotification : Message, INotification
+    public abstract class DomainNotification : Message, INotification
     {
-        public Guid DomainNotificationId { get; private set; }
-        public string Key { get; private set; }
-        public string Value { get; private set; }
-        public int Version { get; private set; }
-        public DateTime Timestamp { get; private set; }
+        public Guid DomainNotificationId { get; }
+        public string Key { get; }
+        public string Value { get; }
+        public int Version { get; }
+        public DateTime Timestamp { get; }
 
-        public DomainNotification(string key, string value) : base(Guid.NewGuid())
+        protected DomainNotification(string key, string value) : base(Guid.NewGuid())
         {
             DomainNotificationId = AggregateId;
-            Version = 1;
+
             Key = key;
             Value = value;
-            Timestamp = DateTime.Now;
+
+            Version = 1;
+            Timestamp = DateTime.UtcNow;
         }
     }
 }

@@ -5,17 +5,13 @@ namespace NerdStore.Core.Messages
 {
     public abstract class Command : Message, IRequest<bool>
     {
-        public DateTime Timestamp { get; private set; }
-        public ValidationResult ValidationResult { get; protected set; }
+        public DateTime Timestamp { get; }
 
-        public Command(Guid aggregateId) : base(aggregateId)
+        protected Command(Guid aggregateId) : base(aggregateId)
         {
-            Timestamp = DateTime.Now;
+            Timestamp = DateTime.UtcNow;
         }
 
-        public virtual bool IsValid()
-        {
-            throw new NotImplementedException();
-        }
+        public abstract ValidationResult GetValidationResult();
     }
 }

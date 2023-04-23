@@ -1,35 +1,36 @@
 ﻿using MediatR;
 
-namespace NerdStore.Core.Messages.CommonMessages.DomainNotifications
+namespace NerdStore.Core.Messages.Common.DomainNotifications.Handlers
 {
-    public class DomainNotificationHandler : INotificationHandler<DomainNotification>, IDisposable
+    public sealed class DomainNotificationHandler : INotificationHandler<DomainNotification>, IDisposable
     {
-        private IList<DomainNotification> _notifications;
+        private readonly List<DomainNotification> _notifications;
 
         public DomainNotificationHandler()
         {
-            _notifications = new List<DomainNotification>();
+            _notifications = new();
         }
 
         public Task Handle(DomainNotification notification, CancellationToken cancellationToken)
         {
             _notifications.Add(notification);
+
             return Task.CompletedTask;
         }
 
-        public virtual IList<DomainNotification> GetNotifications()
+        public IEnumerable<DomainNotification> GetNotifications()
         {
             return _notifications;
         }
 
-        public virtual bool HasNotification()
+        public bool HasNotification()
         {
-            return GetNotifications().Any();
+            return _notifications.Any();
         }
 
         public void Dispose()
         {
-            _notifications = new List<DomainNotification>();
+            _notifications.Clear();
         }
     }
 }
