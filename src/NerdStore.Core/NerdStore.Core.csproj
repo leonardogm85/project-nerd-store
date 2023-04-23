@@ -7,12 +7,14 @@
   </PropertyGroup>
 
   <ItemGroup>
-    <PackageReference Include="FluentValidation" Version="11.5.1" />
-    <PackageReference Include="MediatR" Version="12.0.1" />
+    <Compile Remove="Messages\CommonMessages\**" />
+    <EmbeddedResource Remove="Messages\CommonMessages\**" />
+    <None Remove="Messages\CommonMessages\**" />
   </ItemGroup>
 
   <ItemGroup>
-    <Folder Include="Messages\CommonMessages\IntegrationEvents\" />
+    <PackageReference Include="FluentValidation" Version="11.5.1" />
+    <PackageReference Include="MediatR" Version="12.0.1" />
   </ItemGroup>
 
 </Project>
