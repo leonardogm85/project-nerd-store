@@ -12,14 +12,14 @@ namespace NerdStore.Catalog.Data.Mappings
             builder.HasKey(product => product.Id);
 
             builder.Property(product => product.Name)
-                .IsRequired()
                 .HasMaxLength(100)
-                .IsUnicode(false);
+                .IsUnicode(false)
+                .IsRequired();
 
             builder.Property(product => product.Description)
-                .IsRequired()
                 .HasMaxLength(500)
-                .IsUnicode(false);
+                .IsUnicode(false)
+                .IsRequired();
 
             builder.Property(product => product.Active)
                 .IsRequired();
@@ -28,9 +28,9 @@ namespace NerdStore.Catalog.Data.Mappings
                 .IsRequired();
 
             builder.Property(product => product.Image)
-                .IsRequired()
                 .HasMaxLength(250)
-                .IsUnicode(false);
+                .IsUnicode(false)
+                .IsRequired();
 
             builder.Property(product => product.QuantityInStock)
                 .IsRequired();
@@ -41,16 +41,16 @@ namespace NerdStore.Catalog.Data.Mappings
             builder.OwnsOne(product => product.Dimension, builder =>
             {
                 builder.Property(dimension => dimension.Width)
-                    .IsRequired()
-                    .HasColumnName(nameof(Dimension.Width));
+                    .HasColumnName(nameof(Dimension.Width))
+                    .IsRequired();
 
                 builder.Property(dimension => dimension.Height)
-                    .IsRequired()
-                    .HasColumnName(nameof(Dimension.Height));
+                    .HasColumnName(nameof(Dimension.Height))
+                    .IsRequired();
 
                 builder.Property(dimension => dimension.Depth)
-                    .IsRequired()
-                    .HasColumnName(nameof(Dimension.Depth));
+                    .HasColumnName(nameof(Dimension.Depth))
+                    .IsRequired();
             });
 
             builder.HasOne(product => product.Category)

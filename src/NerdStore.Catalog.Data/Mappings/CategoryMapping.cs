@@ -12,9 +12,9 @@ namespace NerdStore.Catalog.Data.Mappings
             builder.HasKey(category => category.Id);
 
             builder.Property(product => product.Name)
-                .IsRequired()
                 .HasMaxLength(100)
-                .IsUnicode(false);
+                .IsUnicode(false)
+                .IsRequired();
 
             builder.Property(product => product.Code)
                 .IsRequired();
