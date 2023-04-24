@@ -1,11 +1,11 @@
-﻿using NerdStore.Core.Messages.CommonMessages.DomainEvents;
+﻿using NerdStore.Core.Messages.Common.DomainEvents;
 
 namespace NerdStore.Catalog.Domain.Events
 {
     public class ProductWithLowStockEvent : DomainEvent
     {
-        public Guid ProductId { get; private set; }
-        public int QuantityInStock { get; private set; }
+        public Guid ProductId { get; }
+        public int QuantityInStock { get; }
 
         public ProductWithLowStockEvent(Guid productId, int quantityInStock) : base(productId)
         {

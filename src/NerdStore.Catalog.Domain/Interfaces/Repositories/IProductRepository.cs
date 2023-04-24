@@ -5,8 +5,8 @@ namespace NerdStore.Catalog.Domain.Interfaces.Repositories
 {
     public interface IProductRepository : IRepository<Product>
     {
-        Task<IEnumerable<Product>> GetAllProductsAsync();
         Task<Product?> GetProductByIdAsync(Guid productId);
+        Task<IEnumerable<Product>> GetAllProductsAsync();
         Task<IEnumerable<Product>> GetAllProductsByCategoryCodeAsync(int categoryCode);
         Task<IEnumerable<Category>> GetAllCategoriesAsync();
         void AddProduct(Product product);

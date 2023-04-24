@@ -1,12 +1,16 @@
-﻿using NerdStore.Core.DomainObjects;
+﻿using NerdStore.Core.Domain;
 
 namespace NerdStore.Catalog.Domain.Entities
 {
-    public class Dimension
+    public class Dimension : IValueObject
     {
-        public double Width { get; private set; }
-        public double Height { get; private set; }
-        public double Depth { get; private set; }
+        public double Width { get; }
+        public double Height { get; }
+        public double Depth { get; }
+
+        protected Dimension()
+        {
+        }
 
         public Dimension(double width, double height, double depth)
         {
@@ -35,6 +39,9 @@ namespace NerdStore.Catalog.Domain.Entities
                 "The depth must be greater than 0.");
         }
 
-        public override string ToString() => $"{Width}w x {Height}h x {Depth}d";
+        public override string ToString()
+        {
+            return $"{Width}w x {Height}h x {Depth}d";
+        }
     }
 }

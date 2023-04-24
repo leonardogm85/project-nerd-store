@@ -1,13 +1,21 @@
-﻿using NerdStore.Core.DomainObjects;
+﻿using NerdStore.Core.Domain;
 
 namespace NerdStore.Catalog.Domain.Entities
 {
     public class Category : Entity
     {
+        private readonly List<Product> _products;
+
         public string Name { get; private set; }
         public int Code { get; private set; }
 
-        public virtual IEnumerable<Product> Products { get; private set; }
+        public IReadOnlyCollection<Product> Products
+        {
+            get
+            {
+                return _products.AsReadOnly();
+            }
+        }
 
         protected Category()
         {
@@ -18,7 +26,7 @@ namespace NerdStore.Catalog.Domain.Entities
             Name = name;
             Code = code;
 
-            Products = Enumerable.Empty<Product>();
+            _products = new();
 
             Validate();
         }
@@ -40,6 +48,9 @@ namespace NerdStore.Catalog.Domain.Entities
                 "The code must be greater than 0.");
         }
 
-        public override string ToString() => $"{Name} ({Code})";
+        public override string ToString()
+        {
+            return $"{Name} ({Code})";
+        }
     }
 }

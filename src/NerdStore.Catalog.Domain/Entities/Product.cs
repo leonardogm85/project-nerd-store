@@ -1,9 +1,10 @@
-﻿using NerdStore.Core.DomainObjects;
+﻿using NerdStore.Core.Domain;
 
 namespace NerdStore.Catalog.Domain.Entities
 {
     public class Product : Entity, IAggregateRoot
     {
+        public Guid CategoryId { get; private set; }
         public string Name { get; private set; }
         public string Description { get; private set; }
         public double Price { get; private set; }
@@ -12,17 +13,17 @@ namespace NerdStore.Catalog.Domain.Entities
         public int MinimumStock { get; private set; }
         public bool Active { get; private set; }
         public DateTime CreatedAt { get; private set; }
-        public Guid CategoryId { get; private set; }
         public Dimension Dimension { get; private set; }
 
-        public virtual Category Category { get; private set; }
+        public Category? Category { get; private set; }
 
         protected Product()
         {
         }
 
-        public Product(string name, string description, double price, string image, int quantityInStock, int minimumStock, bool active, Guid categoryId, Dimension dimension)
+        public Product(Guid categoryId, string name, string description, double price, string image, int quantityInStock, int minimumStock, bool active, Dimension dimension)
         {
+            CategoryId = categoryId;
             Name = name;
             Description = description;
             Price = price;
@@ -30,17 +31,32 @@ namespace NerdStore.Catalog.Domain.Entities
             QuantityInStock = quantityInStock;
             MinimumStock = minimumStock;
             Active = active;
-            CategoryId = categoryId;
             Dimension = dimension;
 
-            CreatedAt = DateTime.Now;
+            CreatedAt = DateTime.UtcNow;
 
             Validate();
         }
 
-        public void Activate() => Active = true;
+        public void Activate()
+        {
+            Active = true;
+        }
 
-        public void Deactivate() => Active = false;
+        public void Deactivate()
+        {
+            Active = false;
+        }
+
+        public void ChangeCategory(Guid categoryId)
+        {
+            AssertionConcern.AssertArgumentNotEquals(
+                categoryId,
+                Guid.Empty,
+                "The category must be provided.");
+
+            CategoryId = categoryId;
+        }
 
         public void ChangeName(string name)
         {
@@ -94,25 +110,6 @@ namespace NerdStore.Catalog.Domain.Entities
             Image = image;
         }
 
-        public void ChangeCategory(Guid categoryId)
-        {
-            AssertionConcern.AssertArgumentNotEquals(
-                categoryId,
-                Guid.Empty,
-                "The category must be provided.");
-
-            CategoryId = categoryId;
-        }
-
-        public void ChangeDimension(Dimension dimension)
-        {
-            AssertionConcern.AssertArgumentNotNull(
-                dimension,
-                "The dimension must be provided.");
-
-            Dimension = dimension;
-        }
-
         public void ChangeQuantityInStock(int quantityInStock)
         {
             AssertionConcern.AssertArgumentGreaterOrEqualsThan(
@@ -133,6 +130,15 @@ namespace NerdStore.Catalog.Domain.Entities
             MinimumStock = minimumStock;
         }
 
+        public void ChangeDimension(Dimension dimension)
+        {
+            AssertionConcern.AssertArgumentNotNull(
+                dimension,
+                "The dimension must be provided.");
+
+            Dimension = dimension;
+        }
+
         public void AddToStock(int quantity)
         {
             AssertionConcern.AssertArgumentGreaterThan(
@@ -150,8 +156,8 @@ namespace NerdStore.Catalog.Domain.Entities
                 0,
                 "The quantity must be greater than 0.");
 
-            AssertionConcern.AssertArgumentFalse(
-                !HasStock(quantity),
+            AssertionConcern.AssertArgumentTrue(
+                HasStock(quantity),
                 "Insufficient stock.");
 
             QuantityInStock -= quantity;
@@ -167,10 +173,18 @@ namespace NerdStore.Catalog.Domain.Entities
             return QuantityInStock >= quantity;
         }
 
-        public bool LowStock() => QuantityInStock < MinimumStock;
+        public bool LowStock()
+        {
+            return QuantityInStock < MinimumStock;
+        }
 
         private void Validate()
         {
+            AssertionConcern.AssertArgumentNotEquals(
+                CategoryId,
+                Guid.Empty,
+                "The category must be provided.");
+
             AssertionConcern.AssertArgumentNotEmpty(
                 Name,
                 "The name must be provided.");
@@ -212,11 +226,6 @@ namespace NerdStore.Catalog.Domain.Entities
                 MinimumStock,
                 0,
                 "The minimum stock must be greater than or equal to 0.");
-
-            AssertionConcern.AssertArgumentNotEquals(
-                CategoryId,
-                Guid.Empty,
-                "The category must be provided.");
 
             AssertionConcern.AssertArgumentNotNull(
                 Dimension,

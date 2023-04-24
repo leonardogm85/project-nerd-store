@@ -1,26 +1,26 @@
 ﻿using NerdStore.Catalog.Domain.Events;
 using NerdStore.Catalog.Domain.Interfaces.Repositories;
 using NerdStore.Catalog.Domain.Interfaces.Services;
-using NerdStore.Core.Communication.Mediator;
+using NerdStore.Core.Mediator;
 
 namespace NerdStore.Catalog.Domain.Services
 {
-    public class StockService : IStockService
+    public sealed class StockService : IStockService
     {
-        private readonly IProductRepository _productRepository;
         private readonly IMediatorHandler _mediatorHandler;
+        private readonly IProductRepository _productRepository;
 
-        public StockService(IProductRepository productRepository, IMediatorHandler mediatorHandler)
+        public StockService(IMediatorHandler mediatorHandler, IProductRepository productRepository)
         {
-            _productRepository = productRepository;
             _mediatorHandler = mediatorHandler;
+            _productRepository = productRepository;
         }
 
         public async Task<bool> AddToStockAsync(Guid productId, int quantity)
         {
             var product = await _productRepository.GetProductByIdAsync(productId);
 
-            if (product == null)
+            if (product is null)
             {
                 return false;
             }
@@ -36,12 +36,7 @@ namespace NerdStore.Catalog.Domain.Services
         {
             var product = await _productRepository.GetProductByIdAsync(productId);
 
-            if (product == null)
-            {
-                return false;
-            }
-
-            if (!product.HasStock(quantity))
+            if (product is null)
             {
                 return false;
             }
@@ -54,7 +49,7 @@ namespace NerdStore.Catalog.Domain.Services
                     productId,
                     quantity);
 
-                await _mediatorHandler.PublishEventAsync(@event);
+                await _mediatorHandler.PublishDomainEventAsync(@event);
             }
 
             _productRepository.UpdateProduct(product);
@@ -62,6 +57,9 @@ namespace NerdStore.Catalog.Domain.Services
             return await _productRepository.UnitOfWork.CommitAsync();
         }
 
-        public void Dispose() => _productRepository.Dispose();
+        public void Dispose()
+        {
+            _productRepository.Dispose();
+        }
     }
 }

@@ -1,10 +1,9 @@
 ﻿using MediatR;
-using NerdStore.Catalog.Domain.Events;
 using NerdStore.Catalog.Domain.Interfaces.Repositories;
 
-namespace NerdStore.Catalog.Domain.EventHandlers
+namespace NerdStore.Catalog.Domain.Events.Handlers
 {
-    public class ProductEventHandler : INotificationHandler<ProductWithLowStockEvent>
+    public sealed class ProductEventHandler : INotificationHandler<ProductWithLowStockEvent>
     {
         private readonly IProductRepository _productRepository;
 
@@ -13,9 +12,9 @@ namespace NerdStore.Catalog.Domain.EventHandlers
             _productRepository = productRepository;
         }
 
-        public async Task Handle(ProductWithLowStockEvent notification, CancellationToken cancellationToken)
+        public Task Handle(ProductWithLowStockEvent notification, CancellationToken cancellationToken)
         {
-            // TODO: Send a notification e-mail informing you that the quantity in stock is low.
+            return Task.CompletedTask; // TODO: Send a notification email that the quantity in stock is low.
         }
     }
 }
