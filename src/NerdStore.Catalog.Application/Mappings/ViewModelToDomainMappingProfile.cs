@@ -1,6 +1,6 @@
 ﻿using AutoMapper;
 
-namespace NerdStore.Catalog.Application.AutoMapper
+namespace NerdStore.Catalog.Application.Mappings
 {
     public class ViewModelToDomainMappingProfile : Profile
     {

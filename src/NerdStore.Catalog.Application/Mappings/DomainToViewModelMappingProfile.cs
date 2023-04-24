@@ -2,7 +2,7 @@
 using NerdStore.Catalog.Application.ViewModels;
 using NerdStore.Catalog.Domain.Entities;
 
-namespace NerdStore.Catalog.Application.AutoMapper
+namespace NerdStore.Catalog.Application.Mappings
 {
     public class DomainToViewModelMappingProfile : Profile
     {

@@ -4,8 +4,8 @@ namespace NerdStore.Catalog.Application.Interfaces
 {
     public interface IProductAppService : IDisposable
     {
-        Task<IEnumerable<ProductViewModel>> GetAllProductsAsync();
         Task<ProductViewModel?> GetProductByIdAsync(Guid productId);
+        Task<IEnumerable<ProductViewModel>> GetAllProductsAsync();
         Task<IEnumerable<ProductViewModel>> GetAllProductsByCategoryCodeAsync(int categoryCode);
         Task<IEnumerable<CategoryViewModel>> GetAllCategoriesAsync();
         Task AddProductAsync(ProductViewModel productViewModel);

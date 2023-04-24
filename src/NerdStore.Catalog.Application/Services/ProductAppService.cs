@@ -4,11 +4,11 @@ using NerdStore.Catalog.Application.ViewModels;
 using NerdStore.Catalog.Domain.Entities;
 using NerdStore.Catalog.Domain.Interfaces.Repositories;
 using NerdStore.Catalog.Domain.Interfaces.Services;
-using NerdStore.Core.DomainObjects;
+using NerdStore.Core.Domain;
 
 namespace NerdStore.Catalog.Application.Services
 {
-    public class ProductAppService : IProductAppService
+    public sealed class ProductAppService : IProductAppService
     {
         private readonly IMapper _mapper;
         private readonly IProductRepository _productRepository;
@@ -21,14 +21,14 @@ namespace NerdStore.Catalog.Application.Services
             _stockService = stockService;
         }
 
+        public async Task<ProductViewModel?> GetProductByIdAsync(Guid productId)
+        {
+            return _mapper.Map<ProductViewModel?>(await _productRepository.GetProductByIdAsync(productId));
+        }
+
         public async Task<IEnumerable<ProductViewModel>> GetAllProductsAsync()
         {
             return _mapper.Map<IEnumerable<ProductViewModel>>(await _productRepository.GetAllProductsAsync());
-        }
-
-        public async Task<ProductViewModel?> GetProductByIdAsync(Guid productId)
-        {
-            return _mapper.Map<ProductViewModel>(await _productRepository.GetProductByIdAsync(productId));
         }
 
         public async Task<IEnumerable<ProductViewModel>> GetAllProductsByCategoryCodeAsync(int categoryCode)
@@ -49,6 +49,7 @@ namespace NerdStore.Catalog.Application.Services
                 productViewModel.Depth);
 
             var product = new Product(
+                productViewModel.CategoryId,
                 productViewModel.Name,
                 productViewModel.Description,
                 productViewModel.Price,
@@ -56,7 +57,6 @@ namespace NerdStore.Catalog.Application.Services
                 productViewModel.QuantityInStock,
                 productViewModel.MinimumStock,
                 productViewModel.Active,
-                productViewModel.CategoryId,
                 dimension);
 
             _productRepository.AddProduct(product);
@@ -66,12 +66,9 @@ namespace NerdStore.Catalog.Application.Services
 
         public async Task UpdateProductAsync(ProductViewModel productViewModel)
         {
-            var product = await _productRepository.GetProductByIdAsync(productViewModel.Id);
-
-            if (product == null)
-            {
+            var product = await _productRepository.GetProductByIdAsync(productViewModel.Id)
+                ??
                 throw new DomainException("Product not found.");
-            }
 
             var dimension = new Dimension(
                 productViewModel.Width,
