@@ -1,5 +1,5 @@
 ﻿using NerdStore.Catalog.Domain.Entities;
-using NerdStore.Core.DomainObjects;
+using NerdStore.Core.Domain;
 
 namespace NerdStore.Catalog.Domain.Tests.Entities
 {
@@ -106,8 +106,8 @@ namespace NerdStore.Catalog.Domain.Tests.Entities
         {
             // Arrange
             var width = 1;
-            var height = 1;
-            var depth = 1;
+            var height = 2;
+            var depth = 3;
 
             // Act
             var dimension = new Dimension(
@@ -126,8 +126,8 @@ namespace NerdStore.Catalog.Domain.Tests.Entities
         {
             // Arrange
             var width = 1;
-            var height = 1;
-            var depth = 1;
+            var height = 2;
+            var depth = 3;
 
             var expected = $"{width}w x {height}h x {depth}d";
 

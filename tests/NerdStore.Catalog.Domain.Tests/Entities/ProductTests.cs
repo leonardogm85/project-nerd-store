@@ -1,10 +1,32 @@
 using NerdStore.Catalog.Domain.Entities;
-using NerdStore.Core.DomainObjects;
+using NerdStore.Core.Domain;
 
 namespace NerdStore.Catalog.Domain.Tests.Entities
 {
     public class ProductTests
     {
+        [Fact]
+        public void Constructor_GivenAnEmptyProductCategoryId_WhenConstructingTheProduct_ThenValidationWillThrowAnException()
+        {
+            // Arrange, Act & Assert
+
+            var exception = Assert.Throws<DomainException>(() =>
+            {
+                new Product(
+                    Guid.Empty,
+                    "Shirt Software Developer",
+                    "Shirt 100% cotton, resistant to washing and high temperatures.",
+                    4.56,
+                    "shirt1.png",
+                    50,
+                    10,
+                    true,
+                    GetDimension());
+            });
+
+            Assert.Equal("The category must be provided.", exception.Message);
+        }
+
         [Fact]
         public void Constructor_GivenANullProductName_WhenConstructingTheProduct_ThenValidationWillThrowAnException()
         {
@@ -13,14 +35,14 @@ namespace NerdStore.Catalog.Domain.Tests.Entities
             var exception = Assert.Throws<DomainException>(() =>
             {
                 new Product(
-                    null,
+                    Guid.NewGuid(),
+                    null!,
                     "Shirt 100% cotton, resistant to washing and high temperatures.",
                     4.56,
                     "shirt1.png",
                     50,
                     10,
                     true,
-                    Guid.NewGuid(),
                     GetDimension());
             });
 
@@ -35,6 +57,7 @@ namespace NerdStore.Catalog.Domain.Tests.Entities
             var exception = Assert.Throws<DomainException>(() =>
             {
                 new Product(
+                    Guid.NewGuid(),
                     string.Empty,
                     "Shirt 100% cotton, resistant to washing and high temperatures.",
                     4.56,
@@ -42,7 +65,6 @@ namespace NerdStore.Catalog.Domain.Tests.Entities
                     50,
                     10,
                     true,
-                    Guid.NewGuid(),
                     GetDimension());
             });
 
@@ -57,6 +79,7 @@ namespace NerdStore.Catalog.Domain.Tests.Entities
             var exception = Assert.Throws<DomainException>(() =>
             {
                 new Product(
+                    Guid.NewGuid(),
                     "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Phasellus a scelerisque neque. Aliquam placerat.",
                     "Shirt 100% cotton, resistant to washing and high temperatures.",
                     4.56,
@@ -64,7 +87,6 @@ namespace NerdStore.Catalog.Domain.Tests.Entities
                     50,
                     10,
                     true,
-                    Guid.NewGuid(),
                     GetDimension());
             });
 
@@ -79,14 +101,14 @@ namespace NerdStore.Catalog.Domain.Tests.Entities
             var exception = Assert.Throws<DomainException>(() =>
             {
                 new Product(
+                    Guid.NewGuid(),
                     "Shirt Software Developer",
-                    null,
+                    null!,
                     4.56,
                     "shirt1.png",
                     50,
                     10,
                     true,
-                    Guid.NewGuid(),
                     GetDimension());
             });
 
@@ -101,6 +123,7 @@ namespace NerdStore.Catalog.Domain.Tests.Entities
             var exception = Assert.Throws<DomainException>(() =>
             {
                 new Product(
+                    Guid.NewGuid(),
                     "Shirt Software Developer",
                     string.Empty,
                     4.56,
@@ -108,7 +131,6 @@ namespace NerdStore.Catalog.Domain.Tests.Entities
                     50,
                     10,
                     true,
-                    Guid.NewGuid(),
                     GetDimension());
             });
 
@@ -123,6 +145,7 @@ namespace NerdStore.Catalog.Domain.Tests.Entities
             var exception = Assert.Throws<DomainException>(() =>
             {
                 new Product(
+                    Guid.NewGuid(),
                     "Shirt Software Developer",
                     "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Integer dapibus diam " +
                     "at congue mattis. Fusce tristique molestie leo sit amet ultrices. Duis eu purus " +
@@ -136,7 +159,6 @@ namespace NerdStore.Catalog.Domain.Tests.Entities
                     50,
                     10,
                     true,
-                    Guid.NewGuid(),
                     GetDimension());
             });
 
@@ -151,6 +173,7 @@ namespace NerdStore.Catalog.Domain.Tests.Entities
             var exception = Assert.Throws<DomainException>(() =>
             {
                 new Product(
+                    Guid.NewGuid(),
                     "Shirt Software Developer",
                     "Shirt 100% cotton, resistant to washing and high temperatures.",
                     -1,
@@ -158,7 +181,6 @@ namespace NerdStore.Catalog.Domain.Tests.Entities
                     50,
                     10,
                     true,
-                    Guid.NewGuid(),
                     GetDimension());
             });
 
@@ -173,6 +195,7 @@ namespace NerdStore.Catalog.Domain.Tests.Entities
             var exception = Assert.Throws<DomainException>(() =>
             {
                 new Product(
+                    Guid.NewGuid(),
                     "Shirt Software Developer",
                     "Shirt 100% cotton, resistant to washing and high temperatures.",
                     0,
@@ -180,7 +203,6 @@ namespace NerdStore.Catalog.Domain.Tests.Entities
                     50,
                     10,
                     true,
-                    Guid.NewGuid(),
                     GetDimension());
             });
 
@@ -195,14 +217,14 @@ namespace NerdStore.Catalog.Domain.Tests.Entities
             var exception = Assert.Throws<DomainException>(() =>
             {
                 new Product(
+                    Guid.NewGuid(),
                     "Shirt Software Developer",
                     "Shirt 100% cotton, resistant to washing and high temperatures.",
                     4.56,
-                    string.Empty,
+                    null!,
                     50,
                     10,
                     true,
-                    Guid.NewGuid(),
                     GetDimension());
             });
 
@@ -217,6 +239,7 @@ namespace NerdStore.Catalog.Domain.Tests.Entities
             var exception = Assert.Throws<DomainException>(() =>
             {
                 new Product(
+                    Guid.NewGuid(),
                     "Shirt Software Developer",
                     "Shirt 100% cotton, resistant to washing and high temperatures.",
                     4.56,
@@ -224,7 +247,6 @@ namespace NerdStore.Catalog.Domain.Tests.Entities
                     50,
                     10,
                     true,
-                    Guid.NewGuid(),
                     GetDimension());
             });
 
@@ -239,6 +261,7 @@ namespace NerdStore.Catalog.Domain.Tests.Entities
             var exception = Assert.Throws<DomainException>(() =>
             {
                 new Product(
+                    Guid.NewGuid(),
                     "Shirt Software Developer",
                     "Shirt 100% cotton, resistant to washing and high temperatures.",
                     4.56,
@@ -249,7 +272,6 @@ namespace NerdStore.Catalog.Domain.Tests.Entities
                     50,
                     10,
                     true,
-                    Guid.NewGuid(),
                     GetDimension());
             });
 
@@ -264,6 +286,7 @@ namespace NerdStore.Catalog.Domain.Tests.Entities
             var exception = Assert.Throws<DomainException>(() =>
             {
                 new Product(
+                    Guid.NewGuid(),
                     "Shirt Software Developer",
                     "Shirt 100% cotton, resistant to washing and high temperatures.",
                     4.56,
@@ -271,7 +294,6 @@ namespace NerdStore.Catalog.Domain.Tests.Entities
                     -1,
                     10,
                     true,
-                    Guid.NewGuid(),
                     GetDimension());
             });
 
@@ -286,6 +308,7 @@ namespace NerdStore.Catalog.Domain.Tests.Entities
             var exception = Assert.Throws<DomainException>(() =>
             {
                 new Product(
+                    Guid.NewGuid(),
                     "Shirt Software Developer",
                     "Shirt 100% cotton, resistant to washing and high temperatures.",
                     4.56,
@@ -293,33 +316,10 @@ namespace NerdStore.Catalog.Domain.Tests.Entities
                     50,
                     -1,
                     true,
-                    Guid.NewGuid(),
                     GetDimension());
             });
 
             Assert.Equal("The minimum stock must be greater than or equal to 0.", exception.Message);
-        }
-
-        [Fact]
-        public void Constructor_GivenAnEmptyProductCategoryId_WhenConstructingTheProduct_ThenValidationWillThrowAnException()
-        {
-            // Arrange, Act & Assert
-
-            var exception = Assert.Throws<DomainException>(() =>
-            {
-                new Product(
-                    "Shirt Software Developer",
-                    "Shirt 100% cotton, resistant to washing and high temperatures.",
-                    4.56,
-                    "shirt1.png",
-                    50,
-                    10,
-                    true,
-                    Guid.Empty,
-                    GetDimension());
-            });
-
-            Assert.Equal("The category must be provided.", exception.Message);
         }
 
         [Fact]
@@ -330,6 +330,7 @@ namespace NerdStore.Catalog.Domain.Tests.Entities
             var exception = Assert.Throws<DomainException>(() =>
             {
                 new Product(
+                    Guid.NewGuid(),
                     "Shirt Software Developer",
                     "Shirt 100% cotton, resistant to washing and high temperatures.",
                     4.56,
@@ -337,8 +338,7 @@ namespace NerdStore.Catalog.Domain.Tests.Entities
                     50,
                     10,
                     true,
-                    Guid.NewGuid(),
-                    null);
+                    null!);
             });
 
             Assert.Equal("The dimension must be provided.", exception.Message);
@@ -348,6 +348,7 @@ namespace NerdStore.Catalog.Domain.Tests.Entities
         public void Constructor_GivenAValidProduct_WhenConstructingTheProduct_ThenTheProductWillBeConstructed()
         {
             // Arrange
+            var categoryId = Guid.NewGuid();
             var name = "Shirt Software Developer";
             var description = "Shirt 100% cotton; resistant to washing and high temperatures.";
             var price = 4.56;
@@ -355,11 +356,11 @@ namespace NerdStore.Catalog.Domain.Tests.Entities
             var quantityInStock = 50;
             var minimumStock = 10;
             var active = true;
-            var categoryId = Guid.NewGuid();
             var dimension = GetDimension();
 
             // Act
             var product = new Product(
+                categoryId,
                 name,
                 description,
                 price,
@@ -367,10 +368,10 @@ namespace NerdStore.Catalog.Domain.Tests.Entities
                 quantityInStock,
                 minimumStock,
                 active,
-                categoryId,
                 dimension);
 
             // Assert
+            Assert.Equal(categoryId, product.CategoryId);
             Assert.Equal(name, product.Name);
             Assert.Equal(description, product.Description);
             Assert.Equal(price, product.Price);
@@ -378,25 +379,11 @@ namespace NerdStore.Catalog.Domain.Tests.Entities
             Assert.Equal(quantityInStock, product.QuantityInStock);
             Assert.Equal(minimumStock, product.MinimumStock);
             Assert.Equal(active, product.Active);
-            Assert.Equal(categoryId, product.CategoryId);
             Assert.Equal(dimension, product.Dimension);
 
             Assert.NotEqual(default, product.CreatedAt);
-        }
 
-        [Fact]
-        public void Deactivate_GivenAnActivatedProduct_WhenDeactivatingTheProduct_ThenTheProductWillBeDeactivated()
-        {
-            // Arrange
-            var product = GetProduct();
-
-            var expected = false;
-
-            // Act
-            product.Deactivate();
-
-            // Assert
-            Assert.Equal(expected, product.Active);
+            Assert.Null(product.Category);
         }
 
         [Fact]
@@ -405,13 +392,24 @@ namespace NerdStore.Catalog.Domain.Tests.Entities
             // Arrange
             var product = GetProduct();
 
-            var expected = true;
-
             // Act
             product.Activate();
 
             // Assert
-            Assert.Equal(expected, product.Active);
+            Assert.True(product.Active);
+        }
+
+        [Fact]
+        public void Deactivate_GivenAnActivatedProduct_WhenDeactivatingTheProduct_ThenTheProductWillBeDeactivated()
+        {
+            // Arrange
+            var product = GetProduct();
+
+            // Act
+            product.Deactivate();
+
+            // Assert
+            Assert.False(product.Active);
         }
 
         [Fact]
@@ -423,7 +421,7 @@ namespace NerdStore.Catalog.Domain.Tests.Entities
             // Act & Assert
             var exception = Assert.Throws<DomainException>(() =>
             {
-                product.ChangeName(null);
+                product.ChangeName(null!);
             });
 
             Assert.Equal("The name must be provided.", exception.Message);
@@ -483,7 +481,7 @@ namespace NerdStore.Catalog.Domain.Tests.Entities
             // Act & Assert
             var exception = Assert.Throws<DomainException>(() =>
             {
-                product.ChangeDescription(null);
+                product.ChangeDescription(null!);
             });
 
             Assert.Equal("The description must be provided.", exception.Message);
@@ -594,7 +592,7 @@ namespace NerdStore.Catalog.Domain.Tests.Entities
             // Act & Assert
             var exception = Assert.Throws<DomainException>(() =>
             {
-                product.ChangeImage(null);
+                product.ChangeImage(null!);
             });
 
             Assert.Equal("The image must be provided.", exception.Message);
@@ -777,7 +775,7 @@ namespace NerdStore.Catalog.Domain.Tests.Entities
             // Act & Assert
             var exception = Assert.Throws<DomainException>(() =>
             {
-                product.ChangeDimension(null);
+                product.ChangeDimension(null!);
             });
 
             Assert.Equal("The dimension must be provided.", exception.Message);
@@ -790,9 +788,9 @@ namespace NerdStore.Catalog.Domain.Tests.Entities
             var product = GetProduct();
 
             var expected = new Dimension(
+                1,
                 2,
-                2,
-                2);
+                3);
 
             // Act
             product.ChangeDimension(expected);
@@ -1131,9 +1129,18 @@ namespace NerdStore.Catalog.Domain.Tests.Entities
             Assert.Equal(expected, lowStock);
         }
 
+        private static Dimension GetDimension()
+        {
+            return new(
+                1,
+                2,
+                3);
+        }
+
         private static Product GetProduct()
         {
             return new(
+                Guid.NewGuid(),
                 "Shirt Software Developer",
                 "Shirt 100% cotton; resistant to washing and high temperatures.",
                 4.56,
@@ -1141,16 +1148,7 @@ namespace NerdStore.Catalog.Domain.Tests.Entities
                 50,
                 10,
                 true,
-                Guid.NewGuid(),
                 GetDimension());
-        }
-
-        private static Dimension GetDimension()
-        {
-            return new(
-                1,
-                2,
-                3);
         }
     }
 }

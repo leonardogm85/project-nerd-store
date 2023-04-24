@@ -1,5 +1,5 @@
 ﻿using NerdStore.Catalog.Domain.Entities;
-using NerdStore.Core.DomainObjects;
+using NerdStore.Core.Domain;
 
 namespace NerdStore.Catalog.Domain.Tests.Entities
 {
@@ -13,7 +13,7 @@ namespace NerdStore.Catalog.Domain.Tests.Entities
             var exception = Assert.Throws<DomainException>(() =>
             {
                 new Category(
-                    null,
+                    null!,
                     12345);
             });
 
@@ -95,6 +95,8 @@ namespace NerdStore.Catalog.Domain.Tests.Entities
             // Assert
             Assert.Equal(name, category.Name);
             Assert.Equal(code, category.Code);
+
+            Assert.Empty(category.Products);
         }
 
         [Fact]
