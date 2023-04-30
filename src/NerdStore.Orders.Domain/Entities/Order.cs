@@ -1,9 +1,11 @@
-﻿using NerdStore.Core.DomainObjects;
+﻿using NerdStore.Core.Domain;
 
 namespace NerdStore.Orders.Domain.Entities
 {
     public class Order : Entity, IAggregateRoot
     {
+        private readonly List<Item> _items;
+
         public Guid ClientId { get; private set; }
         public Guid? VoucherId { get; private set; }
         public int Code { get; private set; }
@@ -13,40 +15,56 @@ namespace NerdStore.Orders.Domain.Entities
         public Status Status { get; private set; }
         public DateTime CreatedAt { get; private set; }
 
-        public virtual Voucher? Voucher { get; private set; }
+        public Voucher? Voucher { get; private set; }
 
-        public IList<Item> Items { get; private set; }
+        public IReadOnlyCollection<Item> Items
+        {
+            get
+            {
+                return _items.AsReadOnly();
+            }
+        }
 
         protected Order()
         {
         }
 
-        public void SetVoucher(Voucher voucher)
+        protected Order(Guid clientId)
         {
-            Voucher = voucher;
-            VoucherUsed = true;
-            CalculateTotal();
+            ClientId = clientId;
+
+            CreatedAt = DateTime.UtcNow;
+
+            _items = new();
+
+            DraftOrder();
         }
 
-        public void CalculateTotal()
+        public void DraftOrder()
         {
-            var total = Items.Sum(i => i.GetTotal());
+            Status = Status.Draft;
+        }
 
-            if (VoucherUsed)
-            {
-                Discount = Voucher!.DiscountType == DiscountType.Percentage
-                    ? total * Voucher.Value / 100
-                    : Voucher.Value;
+        public void StartOrder()
+        {
+            Status = Status.Started;
+        }
 
-                Total = total < Discount
-                    ? 0
-                    : total;
-            }
-            else
-            {
-                Discount = 0;
-                Total = total;
-            }
+        public void FinalizeOrder()
+        {
+            Status = Status.Paid;
+        }
+
+        public void CancelOrder()
+        {
+            Status = Status.Canceled;
+        }
+
+        public void UseVoucher(Voucher voucher)
+        {
+            VoucherId = voucher.Id;
+
+            VoucherUsed = true;
         }
 
         public void AddItem(Item item)
@@ -56,7 +74,7 @@ namespace NerdStore.Orders.Domain.Entities
                 return;
             }
 
-            var existingItem = Items.FirstOrDefault(i => i.ProductId == item.ProductId);
+            var existingItem = _items.FirstOrDefault(i => i.ProductId == item.ProductId);
 
             if (existingItem is not null)
             {
@@ -64,11 +82,10 @@ namespace NerdStore.Orders.Domain.Entities
 
                 item = existingItem;
 
-                Items.Remove(existingItem);
+                _items.Remove(existingItem);
             }
 
-            Items.Add(item);
-            CalculateTotal();
+            _items.Add(item);
         }
 
         public void UpdateItem(Item item)
@@ -78,16 +95,12 @@ namespace NerdStore.Orders.Domain.Entities
                 return;
             }
 
-            var existingItem = Items.FirstOrDefault(i => i.ProductId == item.ProductId);
-
-            if (existingItem is null)
-            {
+            var existingItem = Items.FirstOrDefault(i => i.ProductId == item.ProductId)
+                ??
                 throw new DomainException("The order does not have this item.");
-            }
 
-            Items.Remove(existingItem);
-            Items.Add(item);
-            CalculateTotal();
+            _items.Remove(existingItem);
+            _items.Add(item);
         }
 
         public void RemoveItem(Item item)
@@ -97,39 +110,31 @@ namespace NerdStore.Orders.Domain.Entities
                 return;
             }
 
-            var existingItem = Items.FirstOrDefault(i => i.ProductId == item.ProductId);
-
-            if (existingItem is null)
-            {
+            var existingItem = _items.FirstOrDefault(i => i.ProductId == item.ProductId)
+                ??
                 throw new DomainException("The order does not have this item.");
-            }
 
-            Items.Remove(existingItem);
-            CalculateTotal();
+            _items.Remove(existingItem);
         }
 
-        public void DraftOrder() => Status = Status.Draft;
-
-        public void StartOrder() => Status = Status.Started;
-
-        public void FinalizeOrder() => Status = Status.Paid;
-
-        public void CancelOrder() => Status = Status.Canceled;
-
-        public static class Factory
+        public void CalculateTotal(Voucher voucher)
         {
-            public static Order NewDraftOrder(Guid clientId)
+            var total = _items.Sum(i => i.GetTotal());
+
+            if (VoucherUsed)
             {
-                var order = new Order
-                {
-                    ClientId = clientId,
-                    CreatedAt = DateTime.Now,
-                    Items = new List<Item>()
-                };
+                Discount = voucher!.DiscountType == DiscountType.Percentage
+                    ? total * voucher.Value / 100
+                    : voucher.Value;
 
-                order.DraftOrder();
-
-                return order;
+                Total = total < Discount
+                    ? 0
+                    : total;
+            }
+            else
+            {
+                Discount = 0;
+                Total = total;
             }
         }
     }

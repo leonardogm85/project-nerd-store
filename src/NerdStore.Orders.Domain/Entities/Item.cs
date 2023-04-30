@@ -1,8 +1,8 @@
-﻿using NerdStore.Core.DomainObjects;
+﻿using NerdStore.Core.Domain;
 
 namespace NerdStore.Orders.Domain.Entities
 {
-    public class Item : Entity
+    public class Item : Entity, IValidatable
     {
         public Guid OrderId { get; private set; }
         public Guid ProductId { get; private set; }
@@ -10,7 +10,7 @@ namespace NerdStore.Orders.Domain.Entities
         public int Quantity { get; private set; }
         public double Price { get; private set; }
 
-        public virtual Order Order { get; private set; }
+        public Order? Order { get; private set; }
 
         protected Item()
         {
@@ -25,23 +25,24 @@ namespace NerdStore.Orders.Domain.Entities
             Price = price;
         }
 
+        public void ChangeQuantity(int quantity)
+        {
+            Quantity = quantity;
+        }
+
         public void AddQuantity(int quantity)
         {
             Quantity += quantity;
-        }
-
-        public void UpdateQuantity(int quantity)
-        {
-            Quantity = quantity;
         }
 
         public double GetTotal()
         {
             return Quantity * Price;
         }
-        public override bool IsValid()
+
+        public bool IsValid()
         {
-            return true;
+            throw new NotImplementedException();
         }
     }
 }

@@ -7,8 +7,8 @@ namespace NerdStore.Catalog.Domain.Entities
         public Guid CategoryId { get; private set; }
         public string Name { get; private set; }
         public string Description { get; private set; }
-        public double Price { get; private set; }
         public string Image { get; private set; }
+        public double Price { get; private set; }
         public int QuantityInStock { get; private set; }
         public int MinimumStock { get; private set; }
         public bool Active { get; private set; }
@@ -21,13 +21,13 @@ namespace NerdStore.Catalog.Domain.Entities
         {
         }
 
-        public Product(Guid categoryId, string name, string description, double price, string image, int quantityInStock, int minimumStock, bool active, Dimension dimension)
+        public Product(Guid categoryId, string name, string description, string image, double price, int quantityInStock, int minimumStock, bool active, Dimension dimension)
         {
             CategoryId = categoryId;
             Name = name;
             Description = description;
-            Price = price;
             Image = image;
+            Price = price;
             QuantityInStock = quantityInStock;
             MinimumStock = minimumStock;
             Active = active;
@@ -86,16 +86,6 @@ namespace NerdStore.Catalog.Domain.Entities
             Description = description;
         }
 
-        public void ChangePrice(double price)
-        {
-            AssertionConcern.AssertArgumentGreaterThan(
-                price,
-                0,
-                "The price must be greater than 0.");
-
-            Price = price;
-        }
-
         public void ChangeImage(string image)
         {
             AssertionConcern.AssertArgumentNotEmpty(
@@ -108,6 +98,16 @@ namespace NerdStore.Catalog.Domain.Entities
                 "The image must be a maximum of 250 characters.");
 
             Image = image;
+        }
+
+        public void ChangePrice(double price)
+        {
+            AssertionConcern.AssertArgumentGreaterThan(
+                price,
+                0,
+                "The price must be greater than 0.");
+
+            Price = price;
         }
 
         public void ChangeQuantityInStock(int quantityInStock)
@@ -203,11 +203,6 @@ namespace NerdStore.Catalog.Domain.Entities
                 500,
                 "The description must be a maximum of 500 characters.");
 
-            AssertionConcern.AssertArgumentGreaterThan(
-                Price,
-                0,
-                "The price must be greater than 0.");
-
             AssertionConcern.AssertArgumentNotEmpty(
                 Image,
                 "The image must be provided.");
@@ -216,6 +211,11 @@ namespace NerdStore.Catalog.Domain.Entities
                 Image,
                 250,
                 "The image must be a maximum of 250 characters.");
+
+            AssertionConcern.AssertArgumentGreaterThan(
+                Price,
+                0,
+                "The price must be greater than 0.");
 
             AssertionConcern.AssertArgumentGreaterOrEqualsThan(
                 QuantityInStock,

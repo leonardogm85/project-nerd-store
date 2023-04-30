@@ -18,6 +18,6 @@ namespace NerdStore.Orders.Domain.Interfaces.Repositories
         void UpdateItem(Item item);
         void RemoveItem(Item item);
 
-        Task<Voucher?> GetVoucherByCodeAsync(string code);
+        Task<Voucher?> GetVoucherByCodeAsync(string voucherCode);
     }
 }
