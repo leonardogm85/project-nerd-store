@@ -6,13 +6,22 @@ using NerdStore.Orders.Domain.Interfaces.Repositories;
 
 namespace NerdStore.Orders.Data.Repositories
 {
-    public class OrderRepository : IOrderRepository
+    public sealed class OrderRepository : IOrderRepository
     {
         private readonly OrderContext _context;
 
-        public OrderRepository(OrderContext context) => _context = context;
+        public IUnitOfWork UnitOfWork
+        {
+            get
+            {
+                return _context;
+            }
+        }
 
-        public IUnitOfWork UnitOfWork => _context;
+        public OrderRepository(OrderContext context)
+        {
+            _context = context;
+        }
 
         public async Task<Order?> GetOrderByIdAsync(Guid orderId)
         {
@@ -50,9 +59,15 @@ namespace NerdStore.Orders.Data.Repositories
                 .ToListAsync();
         }
 
-        public void AddOrder(Order order) => _context.Orders.Add(order);
+        public void AddOrder(Order order)
+        {
+            _context.Orders.Add(order);
+        }
 
-        public void UpdateOrder(Order order) => _context.Orders.Update(order);
+        public void UpdateOrder(Order order)
+        {
+            _context.Orders.Update(order);
+        }
 
         public async Task<Item?> GetItemByIdAsync(Guid itemId)
         {
@@ -70,20 +85,32 @@ namespace NerdStore.Orders.Data.Repositories
                 .FirstOrDefaultAsync(i => i.OrderId == orderId && i.ProductId == productId);
         }
 
-        public void AddItem(Item item) => _context.Items.Add(item);
+        public void AddItem(Item item)
+        {
+            _context.Items.Add(item);
+        }
 
-        public void UpdateItem(Item item) => _context.Items.Update(item);
+        public void UpdateItem(Item item)
+        {
+            _context.Items.Update(item);
+        }
 
-        public void RemoveItem(Item item) => _context.Items.Remove(item);
+        public void RemoveItem(Item item)
+        {
+            _context.Items.Remove(item);
+        }
 
-        public async Task<Voucher?> GetVoucherByCodeAsync(string code)
+        public async Task<Voucher?> GetVoucherByCodeAsync(string voucherCode)
         {
             return await _context
                 .Vouchers
                 .AsNoTracking()
-                .FirstOrDefaultAsync(v => v.Code == code);
+                .FirstOrDefaultAsync(v => v.Code == voucherCode);
         }
 
-        public void Dispose() => _context.Dispose();
+        public void Dispose()
+        {
+            _context.Dispose();
+        }
     }
 }

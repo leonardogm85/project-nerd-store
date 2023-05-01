@@ -1,5 +1,5 @@
 ﻿using Microsoft.EntityFrameworkCore;
-using NerdStore.Core.Communication.Mediator;
+using NerdStore.Core.Mediator;
 using NerdStore.Core.Data;
 using NerdStore.Orders.Data.Extensions;
 using NerdStore.Orders.Data.Mappings;

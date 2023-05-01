@@ -11,7 +11,7 @@ namespace NerdStore.Orders.Data.Mappings
         {
             builder.HasKey(voucher => voucher.Id);
 
-            builder.Property(item => item.Code)
+            builder.Property(voucher => voucher.Code)
                 .HasMaxLength(100)
                 .IsUnicode(false)
                 .IsRequired();
@@ -34,10 +34,10 @@ namespace NerdStore.Orders.Data.Mappings
             builder.Property(voucher => voucher.UsedAt)
                 .IsRequired(false);
 
-            builder.Property(voucher => voucher.Active)
+            builder.Property(voucher => voucher.Used)
                 .IsRequired();
 
-            builder.Property(voucher => voucher.Used)
+            builder.Property(voucher => voucher.Active)
                 .IsRequired();
 
             builder.HasMany(voucher => voucher.Orders)

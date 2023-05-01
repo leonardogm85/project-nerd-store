@@ -11,6 +11,11 @@ namespace NerdStore.Orders.Data.Mappings
         {
             builder.HasKey(item => item.Id);
 
+            builder.HasOne(item => item.Order)
+                .WithMany(order => order.Items)
+                .HasForeignKey(item => item.OrderId)
+                .IsRequired();
+
             builder.Property(item => item.ProductId)
                 .IsRequired();
 
@@ -23,11 +28,6 @@ namespace NerdStore.Orders.Data.Mappings
                 .IsRequired();
 
             builder.Property(item => item.Price)
-                .IsRequired();
-
-            builder.HasOne(item => item.Order)
-                .WithMany(order => order.Items)
-                .HasForeignKey(item => item.OrderId)
                 .IsRequired();
 
             builder.ToTable(nameof(OrderContext.Items));

@@ -14,8 +14,14 @@ namespace NerdStore.Orders.Data.Mappings
             builder.Property(order => order.ClientId)
                 .IsRequired();
 
+            builder.HasOne(order => order.Voucher)
+                .WithMany(voucher => voucher.Orders)
+                .HasForeignKey(order => order.VoucherId)
+                .IsRequired(false);
+
             builder.Property(o => o.Code)
-                .HasDefaultValueSql("NEXT VALUE FOR MySequence");
+                .HasDefaultValueSql("NEXT VALUE FOR MySequence")
+                .IsRequired();
 
             builder.Property(order => order.VoucherUsed)
                 .IsRequired();
@@ -31,11 +37,6 @@ namespace NerdStore.Orders.Data.Mappings
 
             builder.Property(order => order.CreatedAt)
                 .IsRequired();
-
-            builder.HasOne(order => order.Voucher)
-                .WithMany(voucher => voucher.Orders)
-                .HasForeignKey(order => order.VoucherId)
-                .IsRequired(false);
 
             builder.HasMany(order => order.Items)
                 .WithOne(item => item.Order)

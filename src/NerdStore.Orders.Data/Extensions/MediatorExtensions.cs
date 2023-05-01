@@ -1,5 +1,5 @@
-﻿using NerdStore.Core.Communication.Mediator;
-using NerdStore.Core.DomainObjects;
+﻿using NerdStore.Core.Mediator;
+using NerdStore.Core.Domain;
 using NerdStore.Orders.Data.Context;
 
 namespace NerdStore.Orders.Data.Extensions
@@ -19,7 +19,7 @@ namespace NerdStore.Orders.Data.Extensions
                 .ToList();
 
             domainEntities
-                .ForEach(e => e.Entity.RemoveEvents());
+                .ForEach(e => e.Entity.ClearEvents());
 
             var taskEvents = domainEvents
                 .Select(async e => await mediator.PublishEventAsync(e));
