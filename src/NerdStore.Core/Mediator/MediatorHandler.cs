@@ -24,14 +24,14 @@ namespace NerdStore.Core.Mediator
             return await _mediator.Send(command);
         }
 
-        public async Task PublishDomainNotificationAsync<TNotification>(TNotification notification) where TNotification : DomainNotification
-        {
-            await _mediator.Publish(notification);
-        }
-
         public async Task PublishDomainEventAsync<TEvent>(TEvent @event) where TEvent : DomainEvent
         {
             await _mediator.Publish(@event);
+        }
+
+        public async Task PublishDomainNotificationAsync(DomainNotification notification)
+        {
+            await _mediator.Publish(notification);
         }
     }
 }

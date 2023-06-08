@@ -37,11 +37,10 @@ namespace NerdStore.Catalog.Data.Repositories
                 .ToListAsync();
         }
 
-        public async Task<IEnumerable<Product>> GetAllProductsByCategoryCodeAsync(int categoryCode)
+        public async Task<IEnumerable<Product>> GetProductsByCategoryCodeAsync(int categoryCode)
         {
             return await _context.Products
                 .AsNoTracking()
-                .Include(product => product.Category)
                 .Where(product => product.Category!.Code == categoryCode)
                 .ToListAsync();
         }

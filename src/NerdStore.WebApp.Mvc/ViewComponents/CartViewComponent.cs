@@ -7,6 +7,8 @@ namespace NerdStore.WebApp.Mvc.ViewComponents
     {
         private readonly IOrderQuery _orderQuery;
 
+        // TODO: Get authenticated client
+
         protected readonly Guid ClientId = Guid.Parse("D2A38981-0099-4DB4-A5D5-18BF7A472985");
 
         public CartViewComponent(IOrderQuery orderQuery)

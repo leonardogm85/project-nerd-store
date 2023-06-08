@@ -52,7 +52,7 @@ namespace NerdStore.Core.Domain
 
         public static void AssertArgumentNotEmpty(string value, string message)
         {
-            if (value == null || value.Trim().Length == 0)
+            if (value is null || value.Trim().Length == 0)
             {
                 throw new DomainException(message);
             }
@@ -68,7 +68,7 @@ namespace NerdStore.Core.Domain
 
         public static void AssertArgumentNotNull(object object1, string message)
         {
-            if (object1 == null)
+            if (object1 is null)
             {
                 throw new DomainException(message);
             }

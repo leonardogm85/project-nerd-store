@@ -31,9 +31,9 @@ namespace NerdStore.Catalog.Application.Services
             return _mapper.Map<IEnumerable<ProductViewModel>>(await _productRepository.GetAllProductsAsync());
         }
 
-        public async Task<IEnumerable<ProductViewModel>> GetAllProductsByCategoryCodeAsync(int categoryCode)
+        public async Task<IEnumerable<ProductViewModel>> GetProductsByCategoryCodeAsync(int categoryCode)
         {
-            return _mapper.Map<IEnumerable<ProductViewModel>>(await _productRepository.GetAllProductsByCategoryCodeAsync(categoryCode));
+            return _mapper.Map<IEnumerable<ProductViewModel>>(await _productRepository.GetProductsByCategoryCodeAsync(categoryCode));
         }
 
         public async Task<IEnumerable<CategoryViewModel>> GetAllCategoriesAsync()
@@ -52,8 +52,8 @@ namespace NerdStore.Catalog.Application.Services
                 productViewModel.CategoryId,
                 productViewModel.Name,
                 productViewModel.Description,
-                productViewModel.Price,
                 productViewModel.Image,
+                productViewModel.Price,
                 productViewModel.QuantityInStock,
                 productViewModel.MinimumStock,
                 productViewModel.Active,
@@ -77,8 +77,8 @@ namespace NerdStore.Catalog.Application.Services
 
             product.ChangeName(productViewModel.Name);
             product.ChangeDescription(productViewModel.Description);
-            product.ChangePrice(productViewModel.Price);
             product.ChangeImage(productViewModel.Image);
+            product.ChangePrice(productViewModel.Price);
             product.ChangeQuantityInStock(productViewModel.QuantityInStock);
             product.ChangeMinimumStock(productViewModel.MinimumStock);
             product.ChangeCategory(productViewModel.CategoryId);
@@ -100,7 +100,7 @@ namespace NerdStore.Catalog.Application.Services
 
         public async Task<ProductViewModel> AddToStockAsync(Guid productId, int quantity)
         {
-            if (await _stockService.AddToStockAsync(productId, quantity))
+            if (await _stockService.AddProductToStockAsync(new(productId, quantity)))
             {
                 return _mapper.Map<ProductViewModel>(await _productRepository.GetProductByIdAsync(productId));
             }
@@ -110,7 +110,7 @@ namespace NerdStore.Catalog.Application.Services
 
         public async Task<ProductViewModel> RemoveFromStockAsync(Guid productId, int quantity)
         {
-            if (await _stockService.RemoveFromStockAsync(productId, quantity))
+            if (await _stockService.RemoveProductFromStockAsync(new(productId, quantity)))
             {
                 return _mapper.Map<ProductViewModel>(await _productRepository.GetProductByIdAsync(productId));
             }

@@ -3,6 +3,7 @@ using NerdStore.Catalog.Application.Interfaces;
 
 namespace NerdStore.WebApp.Mvc.Controllers
 {
+    [Route("")]
     public class ShowcaseController : Controller
     {
         private readonly IProductAppService _productAppService;
@@ -12,7 +13,7 @@ namespace NerdStore.WebApp.Mvc.Controllers
             _productAppService = productAppService;
         }
 
-        [HttpGet()]
+        [HttpGet("")]
         public async Task<IActionResult> Index()
         {
             return View(await _productAppService.GetAllProductsAsync());

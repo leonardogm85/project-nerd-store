@@ -16,5 +16,7 @@ namespace NerdStore.Catalog.Domain.Events.Handlers
         {
             return Task.CompletedTask; // TODO: Send a notification email that the quantity in stock is low.
         }
+
+        // TODO: StatedOrder and CanceledOrder Events
     }
 }

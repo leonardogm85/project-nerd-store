@@ -7,7 +7,7 @@ namespace NerdStore.Catalog.Domain.Interfaces.Repositories
     {
         Task<Product?> GetProductByIdAsync(Guid productId);
         Task<IEnumerable<Product>> GetAllProductsAsync();
-        Task<IEnumerable<Product>> GetAllProductsByCategoryCodeAsync(int categoryCode);
+        Task<IEnumerable<Product>> GetProductsByCategoryCodeAsync(int categoryCode);
         Task<IEnumerable<Category>> GetAllCategoriesAsync();
         void AddProduct(Product product);
         void UpdateProduct(Product product);

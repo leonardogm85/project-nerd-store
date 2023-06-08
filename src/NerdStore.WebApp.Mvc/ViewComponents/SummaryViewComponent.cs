@@ -1,6 +1,7 @@
 ﻿using MediatR;
 using Microsoft.AspNetCore.Mvc;
-using NerdStore.Core.Messages.CommonMessages.DomainNotifications;
+using NerdStore.Core.Messages.Common.DomainNotifications;
+using NerdStore.Core.Messages.Common.DomainNotifications.Handlers;
 
 namespace NerdStore.WebApp.Mvc.ViewComponents
 {

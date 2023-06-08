@@ -4,12 +4,7 @@ namespace NerdStore.Core.Messages.Common.DomainNotifications.Handlers
 {
     public sealed class DomainNotificationHandler : INotificationHandler<DomainNotification>, IDisposable
     {
-        private readonly List<DomainNotification> _notifications;
-
-        public DomainNotificationHandler()
-        {
-            _notifications = new();
-        }
+        private readonly List<DomainNotification> _notifications = new();
 
         public Task Handle(DomainNotification notification, CancellationToken cancellationToken)
         {

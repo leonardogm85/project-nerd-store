@@ -7,7 +7,8 @@ namespace NerdStore.Catalog.Domain.Events
         public Guid ProductId { get; }
         public int QuantityInStock { get; }
 
-        public ProductWithLowStockEvent(Guid productId, int quantityInStock) : base(productId)
+        public ProductWithLowStockEvent(Guid productId, int quantityInStock)
+            : base(productId)
         {
             ProductId = productId;
             QuantityInStock = quantityInStock;

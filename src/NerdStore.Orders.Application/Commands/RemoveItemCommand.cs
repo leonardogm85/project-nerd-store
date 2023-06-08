@@ -1,37 +1,24 @@
-﻿using FluentValidation;
+﻿using FluentValidation.Results;
 using NerdStore.Core.Messages;
+using NerdStore.Orders.Application.Commands.Validations;
 
 namespace NerdStore.Orders.Application.Commands
 {
     public class RemoveItemCommand : Command
     {
-        public Guid ClientId { get; private set; }
-        public Guid ProductId { get; private set; }
+        public Guid ClientId { get; }
+        public Guid ProductId { get; }
 
-        public RemoveItemCommand(Guid clientId, Guid productId) : base(clientId)
+        public RemoveItemCommand(Guid clientId, Guid productId)
+            : base(clientId)
         {
             ClientId = clientId;
             ProductId = productId;
         }
 
-        public override bool IsValid()
+        public override ValidationResult GetValidationResult()
         {
-            ValidationResult = new RemoveItemValidation().Validate(this);
-            return ValidationResult.IsValid;
-        }
-    }
-
-    public class RemoveItemValidation : AbstractValidator<RemoveItemCommand>
-    {
-        public RemoveItemValidation()
-        {
-            RuleFor(item => item.ClientId)
-                .NotEmpty()
-                .WithMessage("The client ID must be provided.");
-
-            RuleFor(item => item.ProductId)
-                .NotEmpty()
-                .WithMessage("The product ID must be provided.");
+            return new RemoveItemValidation().Validate(this);
         }
     }
 }

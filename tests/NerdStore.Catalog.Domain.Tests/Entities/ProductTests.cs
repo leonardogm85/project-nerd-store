@@ -16,8 +16,8 @@ namespace NerdStore.Catalog.Domain.Tests.Entities
                     Guid.Empty,
                     "Shirt Software Developer",
                     "Shirt 100% cotton, resistant to washing and high temperatures.",
-                    4.56,
                     "shirt1.png",
+                    4.56,
                     50,
                     10,
                     true,
@@ -38,8 +38,8 @@ namespace NerdStore.Catalog.Domain.Tests.Entities
                     Guid.NewGuid(),
                     null!,
                     "Shirt 100% cotton, resistant to washing and high temperatures.",
-                    4.56,
                     "shirt1.png",
+                    4.56,
                     50,
                     10,
                     true,
@@ -60,8 +60,8 @@ namespace NerdStore.Catalog.Domain.Tests.Entities
                     Guid.NewGuid(),
                     string.Empty,
                     "Shirt 100% cotton, resistant to washing and high temperatures.",
-                    4.56,
                     "shirt1.png",
+                    4.56,
                     50,
                     10,
                     true,
@@ -82,8 +82,8 @@ namespace NerdStore.Catalog.Domain.Tests.Entities
                     Guid.NewGuid(),
                     "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Phasellus a scelerisque neque. Aliquam placerat.",
                     "Shirt 100% cotton, resistant to washing and high temperatures.",
-                    4.56,
                     "shirt1.png",
+                    4.56,
                     50,
                     10,
                     true,
@@ -104,8 +104,8 @@ namespace NerdStore.Catalog.Domain.Tests.Entities
                     Guid.NewGuid(),
                     "Shirt Software Developer",
                     null!,
-                    4.56,
                     "shirt1.png",
+                    4.56,
                     50,
                     10,
                     true,
@@ -126,8 +126,8 @@ namespace NerdStore.Catalog.Domain.Tests.Entities
                     Guid.NewGuid(),
                     "Shirt Software Developer",
                     string.Empty,
-                    4.56,
                     "shirt1.png",
+                    4.56,
                     50,
                     10,
                     true,
@@ -154,8 +154,8 @@ namespace NerdStore.Catalog.Domain.Tests.Entities
                     "sollicitudin. Proin ullamcorper bibendum est, eget egestas dolor semper tempor. " +
                     "Donec porta rhoncus arcu et facilisis. Vivamus dapibus malesuada tellus, et " +
                     "pulvinar ex porttitor sed placerat.",
-                    4.56,
                     "shirt1.png",
+                    4.56,
                     50,
                     10,
                     true,
@@ -176,8 +176,8 @@ namespace NerdStore.Catalog.Domain.Tests.Entities
                     Guid.NewGuid(),
                     "Shirt Software Developer",
                     "Shirt 100% cotton, resistant to washing and high temperatures.",
-                    -1,
                     "shirt1.png",
+                    -1,
                     50,
                     10,
                     true,
@@ -198,8 +198,8 @@ namespace NerdStore.Catalog.Domain.Tests.Entities
                     Guid.NewGuid(),
                     "Shirt Software Developer",
                     "Shirt 100% cotton, resistant to washing and high temperatures.",
-                    0,
                     "shirt1.png",
+                    0,
                     50,
                     10,
                     true,
@@ -220,8 +220,8 @@ namespace NerdStore.Catalog.Domain.Tests.Entities
                     Guid.NewGuid(),
                     "Shirt Software Developer",
                     "Shirt 100% cotton, resistant to washing and high temperatures.",
-                    4.56,
                     null!,
+                    4.56,
                     50,
                     10,
                     true,
@@ -242,8 +242,8 @@ namespace NerdStore.Catalog.Domain.Tests.Entities
                     Guid.NewGuid(),
                     "Shirt Software Developer",
                     "Shirt 100% cotton, resistant to washing and high temperatures.",
-                    4.56,
                     string.Empty,
+                    4.56,
                     50,
                     10,
                     true,
@@ -264,11 +264,11 @@ namespace NerdStore.Catalog.Domain.Tests.Entities
                     Guid.NewGuid(),
                     "Shirt Software Developer",
                     "Shirt 100% cotton, resistant to washing and high temperatures.",
-                    4.56,
                     "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Quisque et diam nec " +
                     "est blandit mollis quis eget sapien. Proin egestas risus at lobortis sagittis. " +
                     "Vivamus laoreet dolor a accumsan luctus. Vivamus a suscipit leo. Proin non " +
                     "aliquam tortor accumsan.",
+                    4.56,
                     50,
                     10,
                     true,
@@ -289,8 +289,8 @@ namespace NerdStore.Catalog.Domain.Tests.Entities
                     Guid.NewGuid(),
                     "Shirt Software Developer",
                     "Shirt 100% cotton, resistant to washing and high temperatures.",
-                    4.56,
                     "shirt1.png",
+                    4.56,
                     -1,
                     10,
                     true,
@@ -311,8 +311,8 @@ namespace NerdStore.Catalog.Domain.Tests.Entities
                     Guid.NewGuid(),
                     "Shirt Software Developer",
                     "Shirt 100% cotton, resistant to washing and high temperatures.",
-                    4.56,
                     "shirt1.png",
+                    4.56,
                     50,
                     -1,
                     true,
@@ -333,8 +333,8 @@ namespace NerdStore.Catalog.Domain.Tests.Entities
                     Guid.NewGuid(),
                     "Shirt Software Developer",
                     "Shirt 100% cotton, resistant to washing and high temperatures.",
-                    4.56,
                     "shirt1.png",
+                    4.56,
                     50,
                     10,
                     true,
@@ -351,8 +351,8 @@ namespace NerdStore.Catalog.Domain.Tests.Entities
             var categoryId = Guid.NewGuid();
             var name = "Shirt Software Developer";
             var description = "Shirt 100% cotton; resistant to washing and high temperatures.";
-            var price = 4.56;
             var image = "shirt1.png";
+            var price = 4.56;
             var quantityInStock = 50;
             var minimumStock = 10;
             var active = true;
@@ -363,8 +363,8 @@ namespace NerdStore.Catalog.Domain.Tests.Entities
                 categoryId,
                 name,
                 description,
-                price,
                 image,
+                price,
                 quantityInStock,
                 minimumStock,
                 active,
@@ -374,8 +374,8 @@ namespace NerdStore.Catalog.Domain.Tests.Entities
             Assert.Equal(categoryId, product.CategoryId);
             Assert.Equal(name, product.Name);
             Assert.Equal(description, product.Description);
-            Assert.Equal(price, product.Price);
             Assert.Equal(image, product.Image);
+            Assert.Equal(price, product.Price);
             Assert.Equal(quantityInStock, product.QuantityInStock);
             Assert.Equal(minimumStock, product.MinimumStock);
             Assert.Equal(active, product.Active);
@@ -1143,8 +1143,8 @@ namespace NerdStore.Catalog.Domain.Tests.Entities
                 Guid.NewGuid(),
                 "Shirt Software Developer",
                 "Shirt 100% cotton; resistant to washing and high temperatures.",
-                4.56,
                 "shirt1.png",
+                4.56,
                 50,
                 10,
                 true,

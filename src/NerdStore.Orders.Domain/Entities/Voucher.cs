@@ -1,12 +1,13 @@
-﻿using NerdStore.Core.Domain;
+﻿using FluentValidation.Results;
+using NerdStore.Core.Domain;
 
 namespace NerdStore.Orders.Domain.Entities
 {
-    public class Voucher : Entity, IValidatable
+    public class Voucher : Entity
     {
-        private readonly List<Order> _orders;
+        private readonly List<Order> _orders = new();
 
-        public string Code { get; private set; }
+        public string Code { get; private set; } = null!;
         public double Value { get; private set; }
         public int Quantity { get; private set; }
         public DiscountType DiscountType { get; private set; }
@@ -38,13 +39,6 @@ namespace NerdStore.Orders.Domain.Entities
             Active = active;
 
             CreatedAt = DateTime.UtcNow;
-
-            _orders = new();
-        }
-
-        public bool IsValid()
-        {
-            throw new NotImplementedException();
         }
     }
 }

@@ -1,7 +1,9 @@
-﻿namespace NerdStore.Core.Domain
+﻿using FluentValidation.Results;
+
+namespace NerdStore.Core.Domain
 {
     public interface IValidatable
     {
-        bool IsValid();
+        ValidationResult GetValidationResult();
     }
 }

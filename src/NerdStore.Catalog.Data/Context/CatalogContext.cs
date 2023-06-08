@@ -7,7 +7,8 @@ namespace NerdStore.Catalog.Data.Context
 {
     public sealed class CatalogContext : DbContext, IUnitOfWork
     {
-        public CatalogContext(DbContextOptions<CatalogContext> options) : base(options)
+        public CatalogContext(DbContextOptions<CatalogContext> options)
+            : base(options)
         {
         }
 

@@ -11,7 +11,8 @@ namespace NerdStore.Orders.Data.Context
     {
         private readonly IMediatorHandler _mediatorHandler;
 
-        public OrderContext(DbContextOptions<OrderContext> options, IMediatorHandler mediatorHandler) : base(options)
+        public OrderContext(DbContextOptions<OrderContext> options, IMediatorHandler mediatorHandler)
+            : base(options)
         {
             _mediatorHandler = mediatorHandler;
         }

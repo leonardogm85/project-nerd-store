@@ -2,10 +2,10 @@
 {
     public class CartPaymentViewModel
     {
-        public string CardHolder { get; private set; }
-        public string CardNumber { get; private set; }
-        public string CardExpiresOn { get; private set; }
-        public string CardCvv { get; private set; }
+        public string CardHolder { get; }
+        public string CardNumber { get; }
+        public string CardExpiresOn { get; }
+        public string CardCvv { get; }
 
         public CartPaymentViewModel(string cardHolder, string cardNumber, string cardExpiresOn, string cardCvv)
         {

@@ -6,7 +6,7 @@ namespace NerdStore.Catalog.Application.Interfaces
     {
         Task<ProductViewModel?> GetProductByIdAsync(Guid productId);
         Task<IEnumerable<ProductViewModel>> GetAllProductsAsync();
-        Task<IEnumerable<ProductViewModel>> GetAllProductsByCategoryCodeAsync(int categoryCode);
+        Task<IEnumerable<ProductViewModel>> GetProductsByCategoryCodeAsync(int categoryCode);
         Task<IEnumerable<CategoryViewModel>> GetAllCategoriesAsync();
         Task AddProductAsync(ProductViewModel productViewModel);
         Task UpdateProductAsync(ProductViewModel productViewModel);

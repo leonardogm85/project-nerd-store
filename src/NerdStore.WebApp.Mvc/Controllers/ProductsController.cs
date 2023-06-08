@@ -50,6 +50,8 @@ namespace NerdStore.WebApp.Mvc.Controllers
         [HttpPost("update-product/{productId}")]
         public async Task<IActionResult> UpdateProduct(Guid productId, ProductViewModel productViewModel)
         {
+            // TODO: Keep or remove productId
+
             if (ModelState.IsValid)
             {
                 await _productAppService.UpdateProductAsync(productViewModel);

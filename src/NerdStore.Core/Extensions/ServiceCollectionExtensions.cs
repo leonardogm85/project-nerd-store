@@ -12,11 +12,6 @@ namespace NerdStore.Core.Extensions
         {
             services.AddScoped<IMediatorHandler, MediatorHandler>();
             services.AddScoped<INotificationHandler<DomainNotification>, DomainNotificationHandler>();
-
-            services.AddMediatR(c =>
-            {
-                c.RegisterServicesFromAssembly(typeof(ServiceCollectionExtensions).Assembly);
-            });
         }
     }
 }

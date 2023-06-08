@@ -8,7 +8,7 @@ namespace NerdStore.Core.Mediator
     {
         Task PublishEventAsync<TEvent>(TEvent @event) where TEvent : Event;
         Task<bool> SendCommandAsync<TCommand>(TCommand command) where TCommand : Command;
-        Task PublishDomainNotificationAsync<TNotification>(TNotification notification) where TNotification : DomainNotification;
         Task PublishDomainEventAsync<TEvent>(TEvent @event) where TEvent : DomainEvent;
+        Task PublishDomainNotificationAsync(DomainNotification notification);
     }
 }

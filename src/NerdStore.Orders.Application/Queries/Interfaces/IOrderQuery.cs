@@ -6,6 +6,6 @@ namespace NerdStore.Orders.Application.Queries
     {
         Task<CartViewModel?> GetDraftOrderByClientIdAsync(Guid clientId);
 
-        Task<IEnumerable<OrderViewModel>> GetAllPaidAndCanceledOrdersByClientIdAsync(Guid clientId);
+        Task<IEnumerable<OrderViewModel>> GetPaidAndCanceledOrdersByClientIdAsync(Guid clientId);
     }
 }

@@ -1,70 +1,46 @@
-using Microsoft.AspNetCore.Identity;
-using Microsoft.AspNetCore.Localization;
-using Microsoft.EntityFrameworkCore;
-using NerdStore.Catalog.Application.AutoMapper;
-using NerdStore.Catalog.Data.Context;
-using NerdStore.Orders.Data.Context;
-using NerdStore.WebApp.Mvc.Data;
-using NerdStore.WebApp.Mvc.Extensions;
+using NerdStore.Catalog.Application.Extensions;
+using NerdStore.Core.Extensions;
+using NerdStore.Orders.Application.Extensions;
 using System.Globalization;
 
 var builder = WebApplication.CreateBuilder(args);
 
-// Add services to the container.
-var connectionString = builder.Configuration.GetConnectionString("DefaultConnection");
+var connectionString = builder.Configuration.GetConnectionString("DefaultConnection")
+    ??
+    throw new InvalidOperationException("Connection string not found.");
 
-var cultureName = builder.Configuration.GetValue<string>("AppSettings:CultureName");
+var cultureName = builder.Configuration.GetValue<string>("AppSettings:CultureName")
+    ??
+    throw new InvalidOperationException("Culture name not found.");
 
-builder.Services
-    .AddDbContext<ApplicationDbContext>(options => options.UseSqlServer(connectionString));
-
-builder.Services
-    .AddDbContext<CatalogContext>(options => options.UseSqlServer(connectionString));
-
-builder.Services
-    .AddDbContext<OrderContext>(options => options.UseSqlServer(connectionString));
+builder.Services.AddControllersWithViews();
 
 builder.Services
-    .AddDatabaseDeveloperPageExceptionFilter();
-
-builder.Services
-    .AddDefaultIdentity<IdentityUser>(options => options.SignIn.RequireConfirmedAccount = true)
-    .AddEntityFrameworkStores<ApplicationDbContext>();
-
-builder.Services
-    .AddControllersWithViews()
+    .AddRazorPages()
     .AddRazorRuntimeCompilation();
 
-builder.Services
-    .AddRazorPages();
+builder.Services.AddCore();
+builder.Services.AddCatalog(connectionString);
+builder.Services.AddOrders(connectionString);
 
-builder.Services
-    .AddAutoMapper(typeof(DomainToViewModelMappingProfile), typeof(ViewModelToDomainMappingProfile));
-
-builder.Services
-    .AddMediatR(configuration => configuration.RegisterServicesFromAssembly(typeof(Program).Assembly));
-
-builder.Services
-    .AddServices();
+builder.Services.AddMediatR(c =>
+{
+    c.RegisterServicesFromAssembly(typeof(Program).Assembly);
+});
 
 var app = builder.Build();
 
-// Configure the HTTP request pipeline.
-if (app.Environment.IsDevelopment())
+if (app.Environment.IsProduction())
 {
-    app.UseMigrationsEndPoint();
-}
-else
-{
-    app.UseExceptionHandler("/Home/Error");
+    app.UseExceptionHandler("/common/error");
     app.UseHsts();
 }
 
 app.UseRequestLocalization(new RequestLocalizationOptions
 {
-    SupportedCultures = new List<CultureInfo> { new CultureInfo(cultureName) },
-    SupportedUICultures = new List<CultureInfo> { new CultureInfo(cultureName) },
-    DefaultRequestCulture = new RequestCulture(cultureName)
+    SupportedCultures = new List<CultureInfo> { new(cultureName) },
+    SupportedUICultures = new List<CultureInfo> { new(cultureName) },
+    DefaultRequestCulture = new(cultureName)
 });
 
 app.UseHttpsRedirection();

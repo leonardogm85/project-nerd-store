@@ -1,4 +1,4 @@
-﻿@model NerdStore.Orders.Application.Queries.ViewModels.CartViewModel
+﻿@model CartViewModel
 
 @{
     ViewData["Title"] = "Cart";
@@ -14,7 +14,7 @@
 
     <vc:summary />
 
-    @if (Model.Items is null)
+    @if (Model?.Items is null)
     {
         <div class="alert alert-info" role="alert">
             Your cart is empty!
@@ -37,7 +37,7 @@
                 {
                     <tr>
                         <td>
-                            <a asp-controller="Showcase" asp-action="ProductDetails" asp-route-id="@item.ProductId" class="link-info text-decoration-none">
+                            <a asp-controller="Showcase" asp-action="ProductDetails" asp-route-productid="@item.ProductId" class="link-info text-decoration-none">
                                 @item.ProductName
                             </a>
                         </td>
@@ -46,8 +46,8 @@
                             <form method="post" asp-controller="Cart" asp-action="UpdateItem">
                                 <input type="hidden" name="productId" value="@item.ProductId" />
                                 <div class="input-group">
-                                    <input class="form-control" type="number" name="quantity" aria-label="Quantity" aria-describedby="Quantity" value="@item.Quantity" />
-                                    <button class="btn btn-success" type="button">
+                                    <input type="number" class="form-control" name="quantity" aria-label="Quantity" aria-describedby="Quantity" value="@item.Quantity" />
+                                    <button type="submit" class="btn btn-success">
                                         <span class="fas fa-sync"></span>
                                     </button>
                                 </div>
@@ -88,8 +88,9 @@
                     <td colspan="2">
                         <form method="post" asp-controller="Cart" asp-action="SetVoucher">
                             <div class="input-group">
-                                <input class="form-control" type="text" placeholder="Voucher" aria-label="Voucher" aria-describedby="setVoucher" value="@Model.VoucherCode" />
-                                <button class="btn btn-success" type="button">
+                                <input type="text" class="form-control" name="VoucherCode" placeholder="Voucher" aria-label="Voucher" aria-describedby="setVoucher"
+                                       value="@Model.VoucherCode" />
+                                <button type="submit" class="btn btn-success">
                                     <span class="fas fa-sync"></span>
                                 </button>
                             </div>

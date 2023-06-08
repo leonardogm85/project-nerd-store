@@ -2,11 +2,11 @@
 
 namespace NerdStore.Orders.Domain.Entities
 {
-    public class Item : Entity, IValidatable
+    public class Item : Entity
     {
         public Guid OrderId { get; private set; }
         public Guid ProductId { get; private set; }
-        public string ProductName { get; private set; }
+        public string ProductName { get; private set; } = null!;
         public int Quantity { get; private set; }
         public double Price { get; private set; }
 
@@ -38,11 +38,6 @@ namespace NerdStore.Orders.Domain.Entities
         public double GetTotal()
         {
             return Quantity * Price;
-        }
-
-        public bool IsValid()
-        {
-            throw new NotImplementedException();
         }
     }
 }

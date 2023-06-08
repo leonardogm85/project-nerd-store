@@ -1,8 +1,8 @@
 ﻿using MediatR;
 using Microsoft.AspNetCore.Mvc;
 using NerdStore.Catalog.Application.Interfaces;
-using NerdStore.Core.Communication.Mediator;
-using NerdStore.Core.Messages.CommonMessages.DomainNotifications;
+using NerdStore.Core.Mediator;
+using NerdStore.Core.Messages.Common.DomainNotifications;
 using NerdStore.Orders.Application.Commands;
 using NerdStore.Orders.Application.Queries;
 
@@ -19,7 +19,8 @@ namespace NerdStore.WebApp.Mvc.Controllers
             IProductAppService productAppService,
             IOrderQuery orderQuery,
             IMediatorHandler mediatorHandler,
-            INotificationHandler<DomainNotification> domainNotificationHandler) : base(mediatorHandler, domainNotificationHandler)
+            INotificationHandler<DomainNotification> domainNotificationHandler)
+            : base(mediatorHandler, domainNotificationHandler)
         {
             _productAppService = productAppService;
             _orderQuery = orderQuery;
@@ -44,7 +45,11 @@ namespace NerdStore.WebApp.Mvc.Controllers
 
             if (product.QuantityInStock < quantity)
             {
-                TempData["Error"] = "Insufficient stock.";
+                TempData["Errors"] = new List<string>
+                {
+                    "Insufficient stock."
+                };
+
                 return RedirectToAction(
                     "ProductDetails",
                     "Showcase",
@@ -60,18 +65,62 @@ namespace NerdStore.WebApp.Mvc.Controllers
 
             await _mediatorHandler.SendCommandAsync(command);
 
-            if (IsValid())
+            if (HasNotification())
             {
+                TempData["Errors"] = GetNotifications();
+
                 return RedirectToAction(
-                    "Index",
-                    "Cart");
+                    "ProductDetails",
+                    "Showcase",
+                    new { productId });
             }
 
-            TempData["Errors"] = GetErrorMessages();
             return RedirectToAction(
-                "ProductDetails",
-                "Showcase",
-                new { productId });
+                "Index",
+                "Cart");
+        }
+
+        [HttpPost("update-item")]
+        public async Task<IActionResult> UpdateItem(Guid productId, int quantity)
+        {
+            var product = await _productAppService.GetProductByIdAsync(productId);
+
+            if (product is null)
+            {
+                return BadRequest();
+            }
+
+            if (product.QuantityInStock < quantity)
+            {
+                TempData["Errors"] = new List<string>
+                {
+                    "Insufficient stock."
+                };
+
+                return View(
+                    "Index",
+                    await _orderQuery.GetDraftOrderByClientIdAsync(ClientId));
+            }
+
+            var command = new UpdateItemCommand(
+                ClientId,
+                product.Id,
+                product.Name,
+                quantity,
+                product.Price);
+
+            await _mediatorHandler.SendCommandAsync(command);
+
+            if (HasNotification())
+            {
+                return View(
+                    "Index",
+                    await _orderQuery.GetDraftOrderByClientIdAsync(ClientId));
+            }
+
+            return RedirectToAction(
+                "Index",
+                "Cart");
         }
 
         [HttpPost("remove-item")]
@@ -90,56 +139,16 @@ namespace NerdStore.WebApp.Mvc.Controllers
 
             await _mediatorHandler.SendCommandAsync(command);
 
-            if (IsValid())
+            if (HasNotification())
             {
-                return RedirectToAction(
+                return View(
                     "Index",
-                    "Cart");
+                    await _orderQuery.GetDraftOrderByClientIdAsync(ClientId));
             }
 
-            return View(
+            return RedirectToAction(
                 "Index",
-                await _orderQuery.GetDraftOrderByClientIdAsync(ClientId));
-        }
-
-        [HttpPost("update-item")]
-        public async Task<IActionResult> UpdateItem(Guid productId, int quantity)
-        {
-            var product = await _productAppService.GetProductByIdAsync(productId);
-
-            if (product is null)
-            {
-                return BadRequest();
-            }
-
-            if (product.QuantityInStock < quantity)
-            {
-                TempData["Error"] = "Insufficient stock.";
-                return RedirectToAction(
-                    "ProductDetails",
-                    "Showcase",
-                    new { productId });
-            }
-
-            var command = new UpdateItemCommand(
-                ClientId,
-                product.Id,
-                product.Name,
-                quantity,
-                product.Price);
-
-            await _mediatorHandler.SendCommandAsync(command);
-
-            if (IsValid())
-            {
-                return RedirectToAction(
-                    "Index",
-                    "Cart");
-            }
-
-            return View(
-                "Index",
-                await _orderQuery.GetDraftOrderByClientIdAsync(ClientId));
+                "Cart");
         }
 
         [HttpPost("set-voucher")]
@@ -151,16 +160,18 @@ namespace NerdStore.WebApp.Mvc.Controllers
 
             await _mediatorHandler.SendCommandAsync(command);
 
-            if (IsValid())
+            if (HasNotification())
             {
-                return RedirectToAction(
+                return View(
                     "Index",
-                    "Cart");
+                    await _orderQuery.GetDraftOrderByClientIdAsync(ClientId));
             }
 
-            return View(
+            return RedirectToAction(
                 "Index",
-                await _orderQuery.GetDraftOrderByClientIdAsync(ClientId));
+                "Cart");
         }
+
+        // TODO: StartOrder and SummarizeOrder Actions
     }
 }

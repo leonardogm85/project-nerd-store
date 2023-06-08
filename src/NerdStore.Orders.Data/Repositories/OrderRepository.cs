@@ -41,7 +41,7 @@ namespace NerdStore.Orders.Data.Repositories
                 .FirstOrDefaultAsync(o => o.ClientId == clientId && o.Status == Status.Draft);
         }
 
-        public async Task<IEnumerable<Order>> GetAllOrdersByClientIdAsync(Guid clientId)
+        public async Task<IEnumerable<Order>> GetOrdersByClientIdAsync(Guid clientId)
         {
             return await _context
                 .Orders
@@ -50,7 +50,7 @@ namespace NerdStore.Orders.Data.Repositories
                 .ToListAsync();
         }
 
-        public async Task<IEnumerable<Order>> GetAllPaidAndCanceledOrdersByClientIdAsync(Guid clientId)
+        public async Task<IEnumerable<Order>> GetPaidAndCanceledOrdersByClientIdAsync(Guid clientId)
         {
             return await _context
                 .Orders
@@ -85,6 +85,15 @@ namespace NerdStore.Orders.Data.Repositories
                 .FirstOrDefaultAsync(i => i.OrderId == orderId && i.ProductId == productId);
         }
 
+        public async Task<IEnumerable<Item>> GetItemsByOrderIdAsync(Guid orderId)
+        {
+            return await _context
+                .Items
+                .AsNoTracking()
+                .Where(i => i.OrderId == orderId)
+                .ToListAsync();
+        }
+
         public void AddItem(Item item)
         {
             _context.Items.Add(item);
@@ -98,6 +107,14 @@ namespace NerdStore.Orders.Data.Repositories
         public void RemoveItem(Item item)
         {
             _context.Items.Remove(item);
+        }
+
+        public async Task<Voucher?> GetVoucherByIdAsync(Guid voucherId)
+        {
+            return await _context
+                .Vouchers
+                .AsNoTracking()
+                .FirstOrDefaultAsync(v => v.Id == voucherId);
         }
 
         public async Task<Voucher?> GetVoucherByCodeAsync(string voucherCode)

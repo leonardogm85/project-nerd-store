@@ -21,7 +21,6 @@ namespace NerdStore.Catalog.Application.Extensions
             services.AddScoped<IProductRepository, ProductRepository>();
             services.AddScoped<IStockService, StockService>();
             services.AddScoped<IProductAppService, ProductAppService>();
-
             services.AddScoped<INotificationHandler<ProductWithLowStockEvent>, ProductEventHandler>();
 
             services.AddDbContext<CatalogContext>(o =>
@@ -33,11 +32,6 @@ namespace NerdStore.Catalog.Application.Extensions
             {
                 c.AddProfile<DomainToViewModelMappingProfile>();
                 c.AddProfile<ViewModelToDomainMappingProfile>();
-            });
-
-            services.AddMediatR(c =>
-            {
-                c.RegisterServicesFromAssembly(typeof(ServiceCollectionExtensions).Assembly);
             });
         }
     }

@@ -4,9 +4,9 @@ namespace NerdStore.Catalog.Domain.Entities
 {
     public class Category : Entity
     {
-        private readonly List<Product> _products;
+        private readonly List<Product> _products = new();
 
-        public string Name { get; private set; }
+        public string Name { get; private set; } = null!;
         public int Code { get; private set; }
 
         public IReadOnlyCollection<Product> Products
@@ -25,8 +25,6 @@ namespace NerdStore.Catalog.Domain.Entities
         {
             Name = name;
             Code = code;
-
-            _products = new();
 
             Validate();
         }

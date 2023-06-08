@@ -42,9 +42,9 @@ namespace NerdStore.Orders.Application.Queries
             return cart;
         }
 
-        public async Task<IEnumerable<OrderViewModel>> GetAllPaidAndCanceledOrdersByClientIdAsync(Guid clientId)
+        public async Task<IEnumerable<OrderViewModel>> GetPaidAndCanceledOrdersByClientIdAsync(Guid clientId)
         {
-            var orders = await _orderRepository.GetAllPaidAndCanceledOrdersByClientIdAsync(clientId);
+            var orders = await _orderRepository.GetPaidAndCanceledOrdersByClientIdAsync(clientId);
 
             var viewModel = new List<OrderViewModel>();
 

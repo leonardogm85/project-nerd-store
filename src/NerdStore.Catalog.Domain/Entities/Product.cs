@@ -5,15 +5,15 @@ namespace NerdStore.Catalog.Domain.Entities
     public class Product : Entity, IAggregateRoot
     {
         public Guid CategoryId { get; private set; }
-        public string Name { get; private set; }
-        public string Description { get; private set; }
-        public string Image { get; private set; }
+        public string Name { get; private set; } = null!;
+        public string Description { get; private set; } = null!;
+        public string Image { get; private set; } = null!;
         public double Price { get; private set; }
         public int QuantityInStock { get; private set; }
         public int MinimumStock { get; private set; }
         public bool Active { get; private set; }
         public DateTime CreatedAt { get; private set; }
-        public Dimension Dimension { get; private set; }
+        public Dimension Dimension { get; private set; } = null!;
 
         public Category? Category { get; private set; }
 

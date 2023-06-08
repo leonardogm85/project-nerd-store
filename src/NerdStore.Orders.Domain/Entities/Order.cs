@@ -1,10 +1,12 @@
-﻿using NerdStore.Core.Domain;
+﻿using FluentValidation.Results;
+using NerdStore.Core.Domain;
+using NerdStore.Orders.Domain.Validations;
 
 namespace NerdStore.Orders.Domain.Entities
 {
     public class Order : Entity, IAggregateRoot
     {
-        private readonly List<Item> _items;
+        private readonly List<Item> _items = new();
 
         public Guid ClientId { get; private set; }
         public Guid? VoucherId { get; private set; }
@@ -29,14 +31,10 @@ namespace NerdStore.Orders.Domain.Entities
         {
         }
 
-        protected Order(Guid clientId)
+        public Order(Guid clientId)
         {
             ClientId = clientId;
-
             CreatedAt = DateTime.UtcNow;
-
-            _items = new();
-
             DraftOrder();
         }
 
@@ -60,76 +58,78 @@ namespace NerdStore.Orders.Domain.Entities
             Status = Status.Canceled;
         }
 
-        public void UseVoucher(Voucher voucher)
+        public ValidationResult UseVoucher(Voucher voucher)
         {
-            VoucherId = voucher.Id;
+            var validationResult = new UseVoucherValidation().Validate(voucher);
 
-            VoucherUsed = true;
+            if (validationResult.IsValid)
+            {
+                Voucher = voucher;
+                VoucherId = voucher.Id;
+                VoucherUsed = true;
+
+                CalculateTotal();
+            }
+
+            return validationResult;
         }
 
         public void AddItem(Item item)
         {
-            if (!item.IsValid())
+            var existingItem = GetItemByProductId(item.ProductId);
+
+            if (existingItem is null)
             {
-                return;
+                _items.Add(item);
             }
-
-            var existingItem = _items.FirstOrDefault(i => i.ProductId == item.ProductId);
-
-            if (existingItem is not null)
+            else
             {
                 existingItem.AddQuantity(item.Quantity);
-
-                item = existingItem;
-
-                _items.Remove(existingItem);
             }
 
-            _items.Add(item);
+            CalculateTotal();
         }
 
         public void UpdateItem(Item item)
         {
-            if (!item.IsValid())
-            {
-                return;
-            }
-
-            var existingItem = Items.FirstOrDefault(i => i.ProductId == item.ProductId)
+            var existingItem = GetItemByProductId(item.ProductId)
                 ??
                 throw new DomainException("The order does not have this item.");
 
-            _items.Remove(existingItem);
-            _items.Add(item);
+            existingItem.ChangeQuantity(item.Quantity);
+
+            CalculateTotal();
         }
 
         public void RemoveItem(Item item)
         {
-            if (!item.IsValid())
-            {
-                return;
-            }
-
-            var existingItem = _items.FirstOrDefault(i => i.ProductId == item.ProductId)
+            var existingItem = GetItemByProductId(item.ProductId)
                 ??
                 throw new DomainException("The order does not have this item.");
 
             _items.Remove(existingItem);
+
+            CalculateTotal();
         }
 
-        public void CalculateTotal(Voucher voucher)
+        public Item? GetItemByProductId(Guid productId)
+        {
+            return _items.FirstOrDefault(i => i.ProductId == productId);
+        }
+
+        private void CalculateTotal()
         {
             var total = _items.Sum(i => i.GetTotal());
 
             if (VoucherUsed)
             {
-                Discount = voucher!.DiscountType == DiscountType.Percentage
-                    ? total * voucher.Value / 100
-                    : voucher.Value;
+                Discount = Voucher!.DiscountType == DiscountType.Percentage
+                    ? total * Voucher.Value / 100
+                    : Voucher.Value;
 
                 Total = total < Discount
                     ? 0
-                    : total;
+                    : total - Discount;
             }
             else
             {
