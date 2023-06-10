@@ -100,7 +100,7 @@ namespace NerdStore.Catalog.Application.Services
 
         public async Task<ProductViewModel> AddToStockAsync(Guid productId, int quantity)
         {
-            if (await _stockService.AddProductToStockAsync(new(productId, quantity)))
+            if (await _stockService.AddProductToStockAsync(productId, quantity))
             {
                 return _mapper.Map<ProductViewModel>(await _productRepository.GetProductByIdAsync(productId));
             }
@@ -110,7 +110,7 @@ namespace NerdStore.Catalog.Application.Services
 
         public async Task<ProductViewModel> RemoveFromStockAsync(Guid productId, int quantity)
         {
-            if (await _stockService.RemoveProductFromStockAsync(new(productId, quantity)))
+            if (await _stockService.RemoveProductFromStockAsync(productId, quantity))
             {
                 return _mapper.Map<ProductViewModel>(await _productRepository.GetProductByIdAsync(productId));
             }

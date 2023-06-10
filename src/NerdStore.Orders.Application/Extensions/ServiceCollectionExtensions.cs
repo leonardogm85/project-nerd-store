@@ -1,6 +1,7 @@
 ﻿using MediatR;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.DependencyInjection;
+using NerdStore.Core.Messages.Common.IntegrationEvents;
 using NerdStore.Orders.Application.Commands;
 using NerdStore.Orders.Application.Events;
 using NerdStore.Orders.Application.Queries;
@@ -16,16 +17,20 @@ namespace NerdStore.Orders.Application.Extensions
         {
             services.AddScoped<IOrderRepository, OrderRepository>();
             services.AddScoped<IOrderQuery, OrderQuery>();
+
             services.AddScoped<IRequestHandler<AddItemCommand, bool>, OrderCommandHandler>();
             services.AddScoped<IRequestHandler<UpdateItemCommand, bool>, OrderCommandHandler>();
             services.AddScoped<IRequestHandler<RemoveItemCommand, bool>, OrderCommandHandler>();
             services.AddScoped<IRequestHandler<SetVoucherCommand, bool>, OrderCommandHandler>();
+            services.AddScoped<IRequestHandler<StartOrderCommand, bool>, OrderCommandHandler>();
+
             services.AddScoped<INotificationHandler<DraftOrderStartedEvent>, OrderEventHandler>();
-            services.AddScoped<INotificationHandler<OrderUpdatedEvent>, OrderEventHandler>();
+            services.AddScoped<INotificationHandler<DraftOrderUpdatedEvent>, OrderEventHandler>();
             services.AddScoped<INotificationHandler<OrderItemAddedEvent>, OrderEventHandler>();
             services.AddScoped<INotificationHandler<OrderItemUpdatedEvent>, OrderEventHandler>();
             services.AddScoped<INotificationHandler<OrderItemRemovedEvent>, OrderEventHandler>();
             services.AddScoped<INotificationHandler<SetVoucherEvent>, OrderEventHandler>();
+            services.AddScoped<INotificationHandler<OrderStockRejectedEvent>, OrderEventHandler>();
 
             services.AddDbContext<OrderContext>(o =>
             {

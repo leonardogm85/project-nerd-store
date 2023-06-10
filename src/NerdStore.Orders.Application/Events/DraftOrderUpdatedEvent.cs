@@ -2,13 +2,13 @@
 
 namespace NerdStore.Orders.Application.Events
 {
-    public class OrderUpdatedEvent : Event
+    public class DraftOrderUpdatedEvent : Event
     {
         public Guid OrderId { get; }
         public Guid ClientId { get; }
         public double Total { get; }
 
-        public OrderUpdatedEvent(Guid orderId, Guid clientId, double total)
+        public DraftOrderUpdatedEvent(Guid orderId, Guid clientId, double total)
             : base(orderId)
         {
             OrderId = orderId;

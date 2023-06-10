@@ -1,21 +1,23 @@
 ﻿using MediatR;
+using NerdStore.Core.Messages.Common.IntegrationEvents;
 
 namespace NerdStore.Orders.Application.Events
 {
     public class OrderEventHandler :
         INotificationHandler<DraftOrderStartedEvent>,
-        INotificationHandler<OrderUpdatedEvent>,
+        INotificationHandler<DraftOrderUpdatedEvent>,
         INotificationHandler<OrderItemAddedEvent>,
         INotificationHandler<OrderItemUpdatedEvent>,
         INotificationHandler<OrderItemRemovedEvent>,
-        INotificationHandler<SetVoucherEvent>
+        INotificationHandler<SetVoucherEvent>,
+        INotificationHandler<OrderStockRejectedEvent>
     {
         public Task Handle(DraftOrderStartedEvent @event, CancellationToken cancellationToken)
         {
             return Task.CompletedTask;
         }
 
-        public Task Handle(OrderUpdatedEvent @event, CancellationToken cancellationToken)
+        public Task Handle(DraftOrderUpdatedEvent @event, CancellationToken cancellationToken)
         {
             return Task.CompletedTask;
         }
@@ -37,6 +39,13 @@ namespace NerdStore.Orders.Application.Events
 
         public Task Handle(SetVoucherEvent @event, CancellationToken cancellationToken)
         {
+            return Task.CompletedTask;
+        }
+
+        public Task Handle(OrderStockRejectedEvent @event, CancellationToken cancellationToken)
+        {
+            // TODO: Cancel order
+
             return Task.CompletedTask;
         }
     }

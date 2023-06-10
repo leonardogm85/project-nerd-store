@@ -27,7 +27,7 @@
                 </div>
                 <p class="card-text">@Model.Description</p>
 
-                <form class="row py-2" method="post" asp-controller="Cart" asp-action="AddItem">
+                <form class="row py-2" asp-controller="Cart" asp-action="AddItem">
                     <div asp-validation-summary="ModelOnly" class="text-danger"></div>
 
                     <input type="hidden" id="ProductId" name="ProductId" value="@Model.Id" />

@@ -17,9 +17,9 @@ namespace NerdStore.Catalog.Domain.Services
             _productRepository = productRepository;
         }
 
-        public async Task<bool> AddProductToStockAsync(AddProductToStockDataTransferObject addProductToStock)
+        public async Task<bool> AddProductToStockAsync(Guid productId, int quantity)
         {
-            if (await AddToStockAsync(addProductToStock.ProductId, addProductToStock.Quantity))
+            if (await AddToStockAsync(productId, quantity))
             {
                 return await _productRepository.UnitOfWork.CommitAsync();
             }
@@ -27,9 +27,9 @@ namespace NerdStore.Catalog.Domain.Services
             return false;
         }
 
-        public async Task<bool> RemoveProductFromStockAsync(RemoveProductFromStockDataTransferObject removeProductFromStock)
+        public async Task<bool> RemoveProductFromStockAsync(Guid productId, int quantity)
         {
-            if (await RemoveFromStockAsync(removeProductFromStock.ProductId, removeProductFromStock.Quantity))
+            if (await RemoveFromStockAsync(productId, quantity))
             {
                 return await _productRepository.UnitOfWork.CommitAsync();
             }
@@ -37,11 +37,11 @@ namespace NerdStore.Catalog.Domain.Services
             return false;
         }
 
-        public async Task<bool> AddProductsToStockAsync(IEnumerable<AddProductToStockDataTransferObject> addProductsToStock)
+        public async Task<bool> AddProductsToStockAsync(IEnumerable<AddProductToStockDataTransferObject> products)
         {
-            foreach (var addProductToStock in addProductsToStock)
+            foreach (var product in products)
             {
-                if (await AddToStockAsync(addProductToStock.ProductId, addProductToStock.Quantity))
+                if (await AddToStockAsync(product.ProductId, product.Quantity))
                 {
                     continue;
                 }
@@ -52,11 +52,11 @@ namespace NerdStore.Catalog.Domain.Services
             return await _productRepository.UnitOfWork.CommitAsync();
         }
 
-        public async Task<bool> RemoveProductsFromStockAsync(IEnumerable<RemoveProductFromStockDataTransferObject> removeProductsFromStock)
+        public async Task<bool> RemoveProductsFromStockAsync(IEnumerable<RemoveProductFromStockDataTransferObject> products)
         {
-            foreach (var removeProductFromStock in removeProductsFromStock)
+            foreach (var product in products)
             {
-                if (await RemoveFromStockAsync(removeProductFromStock.ProductId, removeProductFromStock.Quantity))
+                if (await RemoveFromStockAsync(product.ProductId, product.Quantity))
                 {
                     continue;
                 }

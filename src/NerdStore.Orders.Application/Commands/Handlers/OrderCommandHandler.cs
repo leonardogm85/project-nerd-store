@@ -1,6 +1,8 @@
 ﻿using MediatR;
+using NerdStore.Core.DataTransferObjects;
 using NerdStore.Core.Mediator;
 using NerdStore.Core.Messages;
+using NerdStore.Core.Messages.Common.IntegrationEvents;
 using NerdStore.Orders.Application.Events;
 using NerdStore.Orders.Domain.Entities;
 using NerdStore.Orders.Domain.Interfaces.Repositories;
@@ -11,10 +13,11 @@ namespace NerdStore.Orders.Application.Commands
         IRequestHandler<AddItemCommand, bool>,
         IRequestHandler<UpdateItemCommand, bool>,
         IRequestHandler<RemoveItemCommand, bool>,
-        IRequestHandler<SetVoucherCommand, bool>
+        IRequestHandler<SetVoucherCommand, bool>,
+        IRequestHandler<StartOrderCommand, bool>
     {
 
-        // TODO: StartOrder, FinalizeOrder and CancelOrder Handlers
+        // TODO: FinalizeOrder and CancelOrder Handlers
 
         private readonly IMediatorHandler _mediatorHandler;
         private readonly IOrderRepository _orderRepository;
@@ -79,7 +82,7 @@ namespace NerdStore.Orders.Application.Commands
 
                 _orderRepository.UpdateOrder(order);
 
-                order.AddEvent(new OrderUpdatedEvent(
+                order.AddEvent(new DraftOrderUpdatedEvent(
                     order.Id,
                     order.ClientId,
                     order.Total));
@@ -128,7 +131,7 @@ namespace NerdStore.Orders.Application.Commands
             _orderRepository.UpdateOrder(order);
             _orderRepository.UpdateItem(existingItem);
 
-            order.AddEvent(new OrderUpdatedEvent(
+            order.AddEvent(new DraftOrderUpdatedEvent(
                 order.Id,
                 order.ClientId,
                 order.Total));
@@ -174,7 +177,7 @@ namespace NerdStore.Orders.Application.Commands
             _orderRepository.UpdateOrder(order);
             _orderRepository.RemoveItem(existingItem);
 
-            order.AddEvent(new OrderUpdatedEvent(
+            order.AddEvent(new DraftOrderUpdatedEvent(
                 order.Id,
                 order.ClientId,
                 order.Total));
@@ -218,7 +221,7 @@ namespace NerdStore.Orders.Application.Commands
             {
                 _orderRepository.UpdateOrder(order);
 
-                order.AddEvent(new OrderUpdatedEvent(
+                order.AddEvent(new DraftOrderUpdatedEvent(
                     order.Id,
                     order.ClientId,
                     order.Total));
@@ -237,6 +240,49 @@ namespace NerdStore.Orders.Application.Commands
             }
 
             return false;
+        }
+
+        public async Task<bool> Handle(StartOrderCommand command, CancellationToken cancellationToken)
+        {
+            if (!await IsValidAsync(command))
+            {
+                return false;
+            }
+
+            var order = await _orderRepository.GetDraftOrderByClientIdAsync(command.ClientId);
+
+            if (order is null)
+            {
+                await _mediatorHandler.PublishDomainNotificationAsync(new(nameof(Order), "Order not found."));
+
+                return false;
+            }
+
+            order.StartOrder();
+
+            var items = new List<OrderItemDataTransferObject>();
+
+            foreach (var item in order.Items)
+            {
+                items.Add(new(
+                    item.ProductId,
+                    item.Quantity,
+                    item.Price));
+            }
+
+            order.AddEvent(new OrderStartedEvent(
+                order.Id,
+                order.ClientId,
+                order.Total,
+                command.CardHolder,
+                command.CardNumber,
+                command.CardExpiresOn,
+                command.CardCvv,
+                items));
+
+            _orderRepository.UpdateOrder(order);
+
+            return await _orderRepository.UnitOfWork.CommitAsync();
         }
 
         private async Task<bool> IsValidAsync(Command command)

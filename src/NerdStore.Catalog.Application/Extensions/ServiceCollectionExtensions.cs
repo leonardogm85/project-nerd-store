@@ -11,6 +11,7 @@ using NerdStore.Catalog.Domain.Events.Handlers;
 using NerdStore.Catalog.Domain.Interfaces.Repositories;
 using NerdStore.Catalog.Domain.Interfaces.Services;
 using NerdStore.Catalog.Domain.Services;
+using NerdStore.Core.Messages.Common.IntegrationEvents;
 
 namespace NerdStore.Catalog.Application.Extensions
 {
@@ -21,7 +22,9 @@ namespace NerdStore.Catalog.Application.Extensions
             services.AddScoped<IProductRepository, ProductRepository>();
             services.AddScoped<IStockService, StockService>();
             services.AddScoped<IProductAppService, ProductAppService>();
+
             services.AddScoped<INotificationHandler<ProductWithLowStockEvent>, ProductEventHandler>();
+            services.AddScoped<INotificationHandler<OrderStartedEvent>, ProductEventHandler>();
 
             services.AddDbContext<CatalogContext>(o =>
             {

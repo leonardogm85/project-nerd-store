@@ -5,6 +5,7 @@ using NerdStore.Core.Mediator;
 using NerdStore.Core.Messages.Common.DomainNotifications;
 using NerdStore.Orders.Application.Commands;
 using NerdStore.Orders.Application.Queries;
+using NerdStore.Orders.Application.Queries.ViewModels;
 
 namespace NerdStore.WebApp.Mvc.Controllers
 {
@@ -172,6 +173,34 @@ namespace NerdStore.WebApp.Mvc.Controllers
                 "Cart");
         }
 
-        // TODO: StartOrder and SummarizeOrder Actions
+        [HttpGet("summarize-order")]
+        public async Task<IActionResult> SummarizeOrder()
+        {
+            return View(await _orderQuery.GetDraftOrderByClientIdAsync(ClientId));
+        }
+
+        [HttpGet("start-order")]
+        public async Task<IActionResult> StartOrder(CartPaymentViewModel cartPaymentViewModel)
+        {
+            var command = new StartOrderCommand(
+                ClientId,
+                cartPaymentViewModel.CardHolder,
+                cartPaymentViewModel.CardNumber,
+                cartPaymentViewModel.CardExpiresOn,
+                cartPaymentViewModel.CardCvv);
+
+            await _mediatorHandler.SendCommandAsync(command);
+
+            if (HasNotification())
+            {
+                return View(
+                    "SummarizeOrder",
+                    await _orderQuery.GetDraftOrderByClientIdAsync(ClientId));
+            }
+
+            return RedirectToAction(
+                "Index",
+                "Order");
+        }
     }
 }

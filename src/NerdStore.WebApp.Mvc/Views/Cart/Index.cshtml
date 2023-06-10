@@ -43,7 +43,7 @@
                         </td>
 
                         <td>
-                            <form method="post" asp-controller="Cart" asp-action="UpdateItem">
+                            <form asp-controller="Cart" asp-action="UpdateItem">
                                 <input type="hidden" name="productId" value="@item.ProductId" />
                                 <div class="input-group">
                                     <input type="number" class="form-control" name="quantity" aria-label="Quantity" aria-describedby="Quantity" value="@item.Quantity" />
@@ -63,7 +63,7 @@
                         </td>
 
                         <td class="text-end">
-                            <form method="post" asp-controller="Cart" asp-action="RemoveItem">
+                            <form asp-controller="Cart" asp-action="RemoveItem">
                                 <input type="hidden" name="productId" value="@item.ProductId" />
                                 <button type="submit" class="btn btn-danger">
                                     <span class="fas fa-trash-alt me-1"></span>Remove
@@ -86,7 +86,7 @@
                     <td></td>
                     <td></td>
                     <td colspan="2">
-                        <form method="post" asp-controller="Cart" asp-action="SetVoucher">
+                        <form asp-controller="Cart" asp-action="SetVoucher">
                             <div class="input-group">
                                 <input type="text" class="form-control" name="VoucherCode" placeholder="Voucher" aria-label="Voucher" aria-describedby="setVoucher"
                                        value="@Model.VoucherCode" />
@@ -115,7 +115,7 @@
                         <a asp-controller="Showcase" asp-action="Index" class="btn btn-secondary p-3 mb-1" role="button">
                             <span class="fa fa-shopping-cart me-1"></span>Keep buying
                         </a>
-                        <a asp-controller="Cart" asp-action="PurchaseSummary" class="btn btn-success p-3 mb-1" role="button">
+                        <a asp-controller="Cart" asp-action="SummarizeOrder" class="btn btn-success p-3 mb-1" role="button">
                             <span class="fas fa-play me-1"></span>Checkout
                         </a>
                     </td>
