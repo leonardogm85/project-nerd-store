@@ -1,6 +1,7 @@
 using NerdStore.Catalog.Application.Extensions;
 using NerdStore.Core.Extensions;
 using NerdStore.Orders.Application.Extensions;
+using NerdStore.Payments.Application.Extensions;
 using System.Globalization;
 
 var builder = WebApplication.CreateBuilder(args);
@@ -22,6 +23,7 @@ builder.Services
 builder.Services.AddCore();
 builder.Services.AddCatalog(connectionString);
 builder.Services.AddOrders(connectionString);
+builder.Services.AddPayments(connectionString);
 
 builder.Services.AddMediatR(c =>
 {

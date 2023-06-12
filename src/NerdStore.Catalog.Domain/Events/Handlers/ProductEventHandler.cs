@@ -25,7 +25,7 @@ namespace NerdStore.Catalog.Domain.Events.Handlers
 
         public Task Handle(ProductWithLowStockEvent @event, CancellationToken cancellationToken)
         {
-            return Task.CompletedTask; // TODO: Send a notification email that the quantity in stock is low.
+            return Task.CompletedTask; // TODO: Send a notification email that the quantity in stock is low
         }
 
         public async Task Handle(OrderStartedEvent @event, CancellationToken cancellationToken)

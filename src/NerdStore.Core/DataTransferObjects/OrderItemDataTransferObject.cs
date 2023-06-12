@@ -1,6 +1,6 @@
 ﻿namespace NerdStore.Core.DataTransferObjects
 {
-    public class OrderItemDataTransferObject
+    public class OrderItemDataTransferObject : IDataTransferObject
     {
         public Guid ProductId { get; }
         public int Quantity { get; }

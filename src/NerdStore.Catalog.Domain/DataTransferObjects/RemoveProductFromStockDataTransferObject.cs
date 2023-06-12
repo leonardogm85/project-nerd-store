@@ -1,6 +1,8 @@
-﻿namespace NerdStore.Catalog.Domain.DataTransferObjects
+﻿using NerdStore.Core.DataTransferObjects;
+
+namespace NerdStore.Catalog.Domain.DataTransferObjects
 {
-    public class RemoveProductFromStockDataTransferObject
+    public class RemoveProductFromStockDataTransferObject : IDataTransferObject
     {
         public Guid ProductId { get; }
         public int Quantity { get; }
