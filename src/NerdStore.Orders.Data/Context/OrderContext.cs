@@ -35,16 +35,21 @@ namespace NerdStore.Orders.Data.Context
             base.OnModelCreating(modelBuilder);
         }
 
+        public void Rollback()
+        {
+            ChangeTracker.Clear();
+        }
+
         public async Task<bool> CommitAsync()
         {
-            if (await SaveChangesAsync() > 0)
+            var entitiesSaved = await SaveChangesAsync() > 0;
+
+            if (entitiesSaved)
             {
                 await _mediatorHandler.PublishEventsAsync(this);
-
-                return true;
             }
 
-            return false;
+            return entitiesSaved;
         }
     }
 }

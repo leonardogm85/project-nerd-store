@@ -6,22 +6,20 @@ namespace NerdStore.Payments.AntiCorruption.Gateways
     {
         public async Task<string> GetServiceKeyAsync(string apiKey, string encriptionKey)
         {
-            var key = Enumerable
+            var key = new string(Enumerable
                 .Repeat("ABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789", 10)
                 .Select(v => v[Random.Shared.Next(v.Length)])
-                .Cast<string>()
-                .Aggregate(string.Concat);
+                .ToArray());
 
             return await Task.FromResult(key);
         }
 
         public async Task<string> GetCardHashKeyAsync(string serviceKey, string cardHolder, string cardNumber, string cardExpiresOn, string cardCvv)
         {
-            var key = Enumerable
+            var key = new string(Enumerable
                 .Repeat("ABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789", 10)
                 .Select(v => v[Random.Shared.Next(v.Length)])
-                .Cast<string>()
-                .Aggregate(string.Concat);
+                .ToArray());
 
             return await Task.FromResult(key);
         }
@@ -37,7 +35,7 @@ namespace NerdStore.Payments.AntiCorruption.Gateways
 
         public void Dispose()
         {
-            // TODO: Implement
+            // TODO: Implement PayPalGateway Dispose
         }
     }
 }

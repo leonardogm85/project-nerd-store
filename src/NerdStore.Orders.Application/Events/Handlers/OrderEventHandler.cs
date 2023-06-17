@@ -1,52 +1,89 @@
 ﻿using MediatR;
+using NerdStore.Core.Mediator;
 using NerdStore.Core.Messages.Common.IntegrationEvents;
+using NerdStore.Orders.Application.Commands;
 
 namespace NerdStore.Orders.Application.Events
 {
-    public class OrderEventHandler :
+    public sealed class OrderEventHandler :
         INotificationHandler<DraftOrderStartedEvent>,
         INotificationHandler<DraftOrderUpdatedEvent>,
         INotificationHandler<OrderItemAddedEvent>,
         INotificationHandler<OrderItemUpdatedEvent>,
         INotificationHandler<OrderItemRemovedEvent>,
         INotificationHandler<SetVoucherEvent>,
-        INotificationHandler<OrderStockRejectedEvent>
+        INotificationHandler<OrderStockRejectedEvent>,
+        INotificationHandler<PaymentConfirmedEvent>,
+        INotificationHandler<PaymentRejectedEvent>,
+        INotificationHandler<OrderFinishedEvent>,
+        INotificationHandler<OrderRestartedEvent>
     {
-        public Task Handle(DraftOrderStartedEvent @event, CancellationToken cancellationToken)
+        private readonly IMediatorHandler _mediatorHandler;
+
+        public OrderEventHandler(IMediatorHandler mediatorHandler)
         {
-            return Task.CompletedTask;
+            _mediatorHandler = mediatorHandler;
         }
 
-        public Task Handle(DraftOrderUpdatedEvent @event, CancellationToken cancellationToken)
+        public async Task Handle(DraftOrderStartedEvent @event, CancellationToken cancellationToken)
         {
-            return Task.CompletedTask;
+            await Task.CompletedTask; // TODO: Implement DraftOrderStartedEvent Handle
         }
 
-        public Task Handle(OrderItemAddedEvent @event, CancellationToken cancellationToken)
+        public async Task Handle(DraftOrderUpdatedEvent @event, CancellationToken cancellationToken)
         {
-            return Task.CompletedTask;
+            await Task.CompletedTask; // TODO: Implement DraftOrderUpdatedEvent Handle
         }
 
-        public Task Handle(OrderItemUpdatedEvent @event, CancellationToken cancellationToken)
+        public async Task Handle(OrderItemAddedEvent @event, CancellationToken cancellationToken)
         {
-            return Task.CompletedTask;
+            await Task.CompletedTask; // TODO: Implement OrderItemAddedEvent Handle
         }
 
-        public Task Handle(OrderItemRemovedEvent @event, CancellationToken cancellationToken)
+        public async Task Handle(OrderItemUpdatedEvent @event, CancellationToken cancellationToken)
         {
-            return Task.CompletedTask;
+            await Task.CompletedTask; // TODO: Implement OrderItemUpdatedEvent Handle
         }
 
-        public Task Handle(SetVoucherEvent @event, CancellationToken cancellationToken)
+        public async Task Handle(OrderItemRemovedEvent @event, CancellationToken cancellationToken)
         {
-            return Task.CompletedTask;
+            await Task.CompletedTask; // TODO: Implement OrderItemRemovedEvent Handle
         }
 
-        public Task Handle(OrderStockRejectedEvent @event, CancellationToken cancellationToken)
+        public async Task Handle(SetVoucherEvent @event, CancellationToken cancellationToken)
         {
-            // TODO: Cancel order
+            await Task.CompletedTask; // TODO: Implement SetVoucherEvent Handle
+        }
 
-            return Task.CompletedTask;
+        public async Task Handle(OrderStockRejectedEvent @event, CancellationToken cancellationToken)
+        {
+            await _mediatorHandler.SendCommandAsync(new RestartOrderCommand(
+                @event.OrderId,
+                @event.ClientId));
+        }
+
+        public async Task Handle(PaymentConfirmedEvent @event, CancellationToken cancellationToken)
+        {
+            await _mediatorHandler.SendCommandAsync(new FinalizeOrderCommand(
+                @event.OrderId,
+                @event.ClientId));
+        }
+
+        public async Task Handle(PaymentRejectedEvent @event, CancellationToken cancellationToken)
+        {
+            await _mediatorHandler.SendCommandAsync(new CancelOrderCommand(
+                @event.OrderId,
+                @event.ClientId));
+        }
+
+        public async Task Handle(OrderFinishedEvent @event, CancellationToken cancellationToken)
+        {
+            await Task.CompletedTask; // TODO: Implement OrderFinishedEvent Handle
+        }
+
+        public async Task Handle(OrderRestartedEvent @event, CancellationToken cancellationToken)
+        {
+            await Task.CompletedTask; // TODO: Implement OrderRestartedEvent Handle
         }
     }
 }

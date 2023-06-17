@@ -1,12 +1,12 @@
 ﻿using NerdStore.Core.Mediator;
 using NerdStore.Core.Domain;
-using NerdStore.Orders.Data.Context;
+using NerdStore.Catalog.Data.Context;
 
-namespace NerdStore.Orders.Data.Extensions
+namespace NerdStore.Catalog.Data.Extensions
 {
     public static class MediatorExtensions
     {
-        public static async Task PublishEventsAsync(this IMediatorHandler mediator, OrderContext context)
+        public static async Task PublishEventsAsync(this IMediatorHandler mediator, CatalogContext context)
         {
             var domainEntities = context
                 .ChangeTracker

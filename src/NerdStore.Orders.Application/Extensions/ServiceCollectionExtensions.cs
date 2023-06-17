@@ -23,6 +23,9 @@ namespace NerdStore.Orders.Application.Extensions
             services.AddScoped<IRequestHandler<RemoveItemCommand, bool>, OrderCommandHandler>();
             services.AddScoped<IRequestHandler<SetVoucherCommand, bool>, OrderCommandHandler>();
             services.AddScoped<IRequestHandler<StartOrderCommand, bool>, OrderCommandHandler>();
+            services.AddScoped<IRequestHandler<FinalizeOrderCommand, bool>, OrderCommandHandler>();
+            services.AddScoped<IRequestHandler<CancelOrderCommand, bool>, OrderCommandHandler>();
+            services.AddScoped<IRequestHandler<RestartOrderCommand, bool>, OrderCommandHandler>();
 
             services.AddScoped<INotificationHandler<DraftOrderStartedEvent>, OrderEventHandler>();
             services.AddScoped<INotificationHandler<DraftOrderUpdatedEvent>, OrderEventHandler>();
@@ -31,6 +34,10 @@ namespace NerdStore.Orders.Application.Extensions
             services.AddScoped<INotificationHandler<OrderItemRemovedEvent>, OrderEventHandler>();
             services.AddScoped<INotificationHandler<SetVoucherEvent>, OrderEventHandler>();
             services.AddScoped<INotificationHandler<OrderStockRejectedEvent>, OrderEventHandler>();
+            services.AddScoped<INotificationHandler<PaymentConfirmedEvent>, OrderEventHandler>();
+            services.AddScoped<INotificationHandler<PaymentRejectedEvent>, OrderEventHandler>();
+            services.AddScoped<INotificationHandler<OrderFinishedEvent>, OrderEventHandler>();
+            services.AddScoped<INotificationHandler<OrderRestartedEvent>, OrderEventHandler>();
 
             services.AddDbContext<OrderContext>(o =>
             {

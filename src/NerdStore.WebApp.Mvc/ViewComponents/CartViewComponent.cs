@@ -25,7 +25,7 @@ namespace NerdStore.WebApp.Mvc.ViewComponents
                 return View(0);
             }
 
-            return View(order.Items.Count);
+            return View(order.Items.Count());
         }
     }
 }

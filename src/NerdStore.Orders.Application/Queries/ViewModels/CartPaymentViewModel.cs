@@ -1,12 +1,19 @@
-﻿namespace NerdStore.Orders.Application.Queries.ViewModels
+﻿using System.Diagnostics.CodeAnalysis;
+
+namespace NerdStore.Orders.Application.Queries.ViewModels
 {
     public class CartPaymentViewModel
     {
-        public string CardHolder { get; }
-        public string CardNumber { get; }
-        public string CardExpiresOn { get; }
-        public string CardCvv { get; }
+        public required string CardHolder { get; init; }
+        public required string CardNumber { get; init; }
+        public required string CardExpiresOn { get; init; }
+        public required string CardCvv { get; init; }
 
+        public CartPaymentViewModel()
+        {
+        }
+
+        [SetsRequiredMembers]
         public CartPaymentViewModel(string cardHolder, string cardNumber, string cardExpiresOn, string cardCvv)
         {
             CardHolder = cardHolder;

@@ -1,19 +1,23 @@
-﻿namespace NerdStore.Orders.Application.Queries.ViewModels
+﻿using System.Diagnostics.CodeAnalysis;
+
+namespace NerdStore.Orders.Application.Queries.ViewModels
 {
     public class CartViewModel
     {
-        public Guid OrderId { get; }
-        public Guid ClientId { get; }
-        public double Subtotal { get; }
-        public double Discount { get; }
-        public double Total { get; }
-        public string? VoucherCode { get; }
+        public required Guid OrderId { get; init; }
+        public required Guid ClientId { get; init; }
+        public required double Subtotal { get; init; }
+        public required double Discount { get; init; }
+        public required double Total { get; init; }
+        public string? VoucherCode { get; init; }
+        public required IEnumerable<CartItemViewModel> Items { get; init; }
 
-        public List<CartItemViewModel> Items { get; } = new();
+        public CartViewModel()
+        {
+        }
 
-        public CartPaymentViewModel? Payment { get; init; }
-
-        public CartViewModel(Guid orderId, Guid clientId, double subtotal, double discount, double total, string? voucherCode)
+        [SetsRequiredMembers]
+        public CartViewModel(Guid orderId, Guid clientId, double subtotal, double discount, double total, string? voucherCode, IEnumerable<CartItemViewModel> items)
         {
             OrderId = orderId;
             ClientId = clientId;
@@ -21,6 +25,7 @@
             Discount = discount;
             Total = total;
             VoucherCode = voucherCode;
+            Items = items;
         }
     }
 }

@@ -10,6 +10,8 @@ namespace NerdStore.Orders.Domain.Entities
         public int Quantity { get; private set; }
         public double Price { get; private set; }
 
+        // TODO: Create Total Property
+
         public Order? Order { get; private set; }
 
         protected Item()

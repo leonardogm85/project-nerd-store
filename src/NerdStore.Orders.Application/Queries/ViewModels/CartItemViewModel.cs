@@ -1,13 +1,20 @@
-﻿namespace NerdStore.Orders.Application.Queries.ViewModels
+﻿using System.Diagnostics.CodeAnalysis;
+
+namespace NerdStore.Orders.Application.Queries.ViewModels
 {
     public class CartItemViewModel
     {
-        public Guid ProductId { get; }
-        public string ProductName { get; }
-        public int Quantity { get; }
-        public double Price { get; }
-        public double Total { get; }
+        public required Guid ProductId { get; init; }
+        public required string ProductName { get; init; }
+        public required int Quantity { get; init; }
+        public required double Price { get; init; }
+        public required double Total { get; init; }
 
+        public CartItemViewModel()
+        {
+        }
+
+        [SetsRequiredMembers]
         public CartItemViewModel(Guid productId, string productName, int quantity, double price, double total)
         {
             ProductId = productId;

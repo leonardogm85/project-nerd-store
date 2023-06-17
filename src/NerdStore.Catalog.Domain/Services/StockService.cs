@@ -1,4 +1,5 @@
 ﻿using NerdStore.Catalog.Domain.DataTransferObjects;
+using NerdStore.Catalog.Domain.Entities;
 using NerdStore.Catalog.Domain.Events;
 using NerdStore.Catalog.Domain.Interfaces.Repositories;
 using NerdStore.Catalog.Domain.Interfaces.Services;
@@ -24,6 +25,8 @@ namespace NerdStore.Catalog.Domain.Services
                 return await _productRepository.UnitOfWork.CommitAsync();
             }
 
+            _productRepository.UnitOfWork.Rollback();
+
             return false;
         }
 
@@ -33,6 +36,8 @@ namespace NerdStore.Catalog.Domain.Services
             {
                 return await _productRepository.UnitOfWork.CommitAsync();
             }
+
+            _productRepository.UnitOfWork.Rollback();
 
             return false;
         }
@@ -45,6 +50,8 @@ namespace NerdStore.Catalog.Domain.Services
                 {
                     continue;
                 }
+
+                _productRepository.UnitOfWork.Rollback();
 
                 return false;
             }
@@ -60,6 +67,8 @@ namespace NerdStore.Catalog.Domain.Services
                 {
                     continue;
                 }
+
+                _productRepository.UnitOfWork.Rollback();
 
                 return false;
             }
@@ -94,6 +103,17 @@ namespace NerdStore.Catalog.Domain.Services
 
             if (product is null)
             {
+                return false;
+            }
+
+            var hasStock = product.HasStock(quantity);
+
+            if (!hasStock)
+            {
+                await _mediatorHandler.PublishDomainNotificationAsync(new(
+                    nameof(Product),
+                    $"Insufficient stock of product {product.Name} ({product.QuantityInStock} in stock)."));
+
                 return false;
             }
 

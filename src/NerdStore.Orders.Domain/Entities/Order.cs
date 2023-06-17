@@ -17,6 +17,8 @@ namespace NerdStore.Orders.Domain.Entities
         public Status Status { get; private set; }
         public DateTime CreatedAt { get; private set; }
 
+        // TODO: Create Subtotal Property
+
         public Voucher? Voucher { get; private set; }
 
         public IReadOnlyCollection<Item> Items

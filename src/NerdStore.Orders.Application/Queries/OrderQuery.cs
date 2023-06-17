@@ -27,17 +27,13 @@ namespace NerdStore.Orders.Application.Queries
                 order.Total + order.Discount,
                 order.Discount,
                 order.Total,
-                order.Voucher?.Code);
-
-            foreach (var item in order.Items)
-            {
-                cart.Items.Add(new(
+                order.Voucher?.Code,
+                order.Items.Select(item => new CartItemViewModel(
                     item.ProductId,
                     item.ProductName,
                     item.Quantity,
                     item.Price,
-                    item.GetTotal()));
-            }
+                    item.GetTotal())));
 
             return cart;
         }
@@ -46,18 +42,12 @@ namespace NerdStore.Orders.Application.Queries
         {
             var orders = await _orderRepository.GetPaidAndCanceledOrdersByClientIdAsync(clientId);
 
-            var viewModel = new List<OrderViewModel>();
-
-            foreach (var order in orders)
-            {
-                viewModel.Add(new(
+            return orders.Select(order => new OrderViewModel(
                     order.Code,
                     order.Total,
                     (int)order.Status,
-                    order.CreatedAt));
-            }
-
-            return viewModel.OrderByDescending(o => o.Code);
+                    order.CreatedAt))
+                .OrderByDescending(order => order.Code);
         }
     }
 }

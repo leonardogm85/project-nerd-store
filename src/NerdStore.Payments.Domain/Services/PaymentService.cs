@@ -1,6 +1,5 @@
 ﻿using NerdStore.Core.DataTransferObjects;
 using NerdStore.Core.Mediator;
-using NerdStore.Core.Messages.Common.DomainNotifications;
 using NerdStore.Core.Messages.Common.IntegrationEvents;
 using NerdStore.Payments.Domain.Entities;
 using NerdStore.Payments.Domain.Interfaces.Facades;
@@ -37,28 +36,29 @@ namespace NerdStore.Payments.Domain.Services
 
             if (transaction.Status == TransactionStatus.Confirmed)
             {
-                await _mediatorHandler.PublishEventAsync(new PaymentConfirmedEvent(
-                    payment.OrderId,
-                    payment.ClientId,
-                    payment.Id,
-                    transaction.Id,
-                    payment.Amount));
-
                 _paymentRepository.AddPayment(payment);
                 _paymentRepository.AddTransaction(transaction);
 
-                await _paymentRepository.UnitOfWork.CommitAsync();
+                if (await _paymentRepository.UnitOfWork.CommitAsync())
+                {
+                    await _mediatorHandler.PublishIntegrationEventAsync(new PaymentConfirmedEvent(
+                        payment.OrderId,
+                        payment.ClientId,
+                        payment.Id,
+                        transaction.Id,
+                        payment.Amount));
+                }
             }
             else
             {
-                await _mediatorHandler.PublishEventAsync(new PaymentRejectedEvent(
+                await _mediatorHandler.PublishDomainNotificationAsync(new(nameof(Payment), "Payment rejected."));
+
+                await _mediatorHandler.PublishIntegrationEventAsync(new PaymentRejectedEvent(
                     payment.OrderId,
                     payment.ClientId,
                     payment.Id,
                     transaction.Id,
                     payment.Amount));
-
-                await _mediatorHandler.PublishDomainNotificationAsync(new DomainNotification(nameof(Payment), "Payment rejected."));
             }
 
             return transaction;

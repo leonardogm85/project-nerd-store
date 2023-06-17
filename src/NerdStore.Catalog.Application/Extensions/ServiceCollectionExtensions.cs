@@ -25,6 +25,7 @@ namespace NerdStore.Catalog.Application.Extensions
 
             services.AddScoped<INotificationHandler<ProductWithLowStockEvent>, ProductEventHandler>();
             services.AddScoped<INotificationHandler<OrderStartedEvent>, ProductEventHandler>();
+            services.AddScoped<INotificationHandler<OrderCanceledEvent>, ProductEventHandler>();
 
             services.AddDbContext<CatalogContext>(o =>
             {

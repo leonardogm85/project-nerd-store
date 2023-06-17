@@ -6,16 +6,15 @@ namespace NerdStore.Payments.AntiCorruption.Configuration
     {
         public string GetValue(string key)
         {
-            return Enumerable
+            return new(Enumerable
                 .Repeat("ABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789", 10)
                 .Select(v => v[Random.Shared.Next(v.Length)])
-                .Cast<string>()
-                .Aggregate(string.Concat);
+                .ToArray());
         }
 
         public void Dispose()
         {
-            // TODO: Implement
+            // TODO: Implement ConfigurationManager Dispose
         }
     }
 }

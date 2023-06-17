@@ -21,6 +21,10 @@ namespace NerdStore.Payments.Data.Extensions
             domainEntities
                 .ForEach(e => e.Entity.ClearEvents());
 
+            context
+                .ChangeTracker
+                .Clear();
+
             var taskEvents = domainEvents
                 .Select(async e => await mediator.PublishEventAsync(e));
 

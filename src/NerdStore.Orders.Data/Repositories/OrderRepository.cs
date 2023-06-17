@@ -28,6 +28,8 @@ namespace NerdStore.Orders.Data.Repositories
             return await _context
                 .Orders
                 .AsNoTracking()
+                .Include(o => o.Voucher)
+                .Include(o => o.Items)
                 .FirstOrDefaultAsync(o => o.Id == orderId);
         }
 
@@ -36,8 +38,8 @@ namespace NerdStore.Orders.Data.Repositories
             return await _context
                 .Orders
                 .AsNoTracking()
-                .Include(o => o.Items)
                 .Include(o => o.Voucher)
+                .Include(o => o.Items)
                 .FirstOrDefaultAsync(o => o.ClientId == clientId && o.Status == Status.Draft);
         }
 

@@ -1,9 +1,9 @@
 ﻿using Microsoft.EntityFrameworkCore;
 using NerdStore.Core.Data;
 using NerdStore.Core.Mediator;
-using NerdStore.Payments.Domain.Entities;
 using NerdStore.Payments.Data.Extensions;
 using NerdStore.Payments.Data.Mappings;
+using NerdStore.Payments.Domain.Entities;
 
 namespace NerdStore.Payments.Data.Context
 {
@@ -28,16 +28,21 @@ namespace NerdStore.Payments.Data.Context
             base.OnModelCreating(modelBuilder);
         }
 
+        public void Rollback()
+        {
+            ChangeTracker.Clear();
+        }
+
         public async Task<bool> CommitAsync()
         {
-            if (await SaveChangesAsync() > 0)
+            var entitiesSaved = await SaveChangesAsync() > 0;
+
+            if (entitiesSaved)
             {
                 await _mediatorHandler.PublishEventsAsync(this);
-
-                return true;
             }
 
-            return false;
+            return entitiesSaved;
         }
     }
 }

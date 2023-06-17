@@ -9,16 +9,16 @@ using NerdStore.Orders.Domain.Interfaces.Repositories;
 
 namespace NerdStore.Orders.Application.Commands
 {
-    public class OrderCommandHandler :
+    public sealed class OrderCommandHandler :
         IRequestHandler<AddItemCommand, bool>,
         IRequestHandler<UpdateItemCommand, bool>,
         IRequestHandler<RemoveItemCommand, bool>,
         IRequestHandler<SetVoucherCommand, bool>,
-        IRequestHandler<StartOrderCommand, bool>
+        IRequestHandler<StartOrderCommand, bool>,
+        IRequestHandler<FinalizeOrderCommand, bool>,
+        IRequestHandler<CancelOrderCommand, bool>,
+        IRequestHandler<RestartOrderCommand, bool>
     {
-
-        // TODO: FinalizeOrder and CancelOrder Handlers
-
         private readonly IMediatorHandler _mediatorHandler;
         private readonly IOrderRepository _orderRepository;
 
@@ -260,25 +260,113 @@ namespace NerdStore.Orders.Application.Commands
 
             order.StartOrder();
 
-            var items = new List<OrderItemDataTransferObject>();
+            _orderRepository.UpdateOrder(order);
 
-            foreach (var item in order.Items)
+            var entitiesSaved = await _orderRepository.UnitOfWork.CommitAsync();
+
+            if (entitiesSaved)
             {
-                items.Add(new(
-                    item.ProductId,
-                    item.Quantity,
-                    item.Price));
+                await _mediatorHandler.PublishIntegrationEventAsync(new OrderStartedEvent(
+                    order.Id,
+                    order.ClientId,
+                    order.Total,
+                    command.CardHolder,
+                    command.CardNumber,
+                    command.CardExpiresOn,
+                    command.CardCvv,
+                    order.Items.Select(item => new OrderItemDataTransferObject(
+                        item.ProductId,
+                        item.Quantity,
+                        item.Price))));
             }
 
-            order.AddEvent(new OrderStartedEvent(
-                order.Id,
-                order.ClientId,
-                order.Total,
-                command.CardHolder,
-                command.CardNumber,
-                command.CardExpiresOn,
-                command.CardCvv,
-                items));
+            return entitiesSaved;
+        }
+
+        public async Task<bool> Handle(FinalizeOrderCommand command, CancellationToken cancellationToken)
+        {
+            if (!await IsValidAsync(command))
+            {
+                return false;
+            }
+
+            var order = await _orderRepository.GetOrderByIdAsync(command.OrderId);
+
+            if (order is null)
+            {
+                await _mediatorHandler.PublishDomainNotificationAsync(new(nameof(Order), "Order not found."));
+
+                return false;
+            }
+
+            order.FinalizeOrder();
+
+            order.AddEvent(new OrderFinishedEvent(
+                command.OrderId,
+                command.ClientId));
+
+            _orderRepository.UpdateOrder(order);
+
+            return await _orderRepository.UnitOfWork.CommitAsync();
+        }
+
+        public async Task<bool> Handle(CancelOrderCommand command, CancellationToken cancellationToken)
+        {
+            if (!await IsValidAsync(command))
+            {
+                return false;
+            }
+
+            var order = await _orderRepository.GetOrderByIdAsync(command.OrderId);
+
+            if (order is null)
+            {
+                await _mediatorHandler.PublishDomainNotificationAsync(new(nameof(Order), "Order not found."));
+
+                return false;
+            }
+
+            order.DraftOrder();
+
+            _orderRepository.UpdateOrder(order);
+
+            var entitiesSaved = await _orderRepository.UnitOfWork.CommitAsync();
+
+            if (entitiesSaved)
+            {
+                await _mediatorHandler.PublishIntegrationEventAsync(new OrderCanceledEvent(
+                    order.Id,
+                    order.ClientId,
+                    order.Items.Select(item => new OrderItemDataTransferObject(
+                        item.ProductId,
+                        item.Quantity,
+                        item.Price))));
+            }
+
+            return entitiesSaved;
+        }
+
+        public async Task<bool> Handle(RestartOrderCommand command, CancellationToken cancellationToken)
+        {
+            if (!await IsValidAsync(command))
+            {
+                return false;
+            }
+
+            var order = await _orderRepository.GetOrderByIdAsync(command.OrderId);
+
+            if (order is null)
+            {
+                await _mediatorHandler.PublishDomainNotificationAsync(new(nameof(Order), "Order not found."));
+
+                return false;
+            }
+
+            order.DraftOrder();
+
+            order.AddEvent(new OrderRestartedEvent(
+                command.OrderId,
+                command.ClientId));
 
             _orderRepository.UpdateOrder(order);
 

@@ -2,6 +2,7 @@
 using NerdStore.Core.Messages;
 using NerdStore.Core.Messages.Common.DomainEvents;
 using NerdStore.Core.Messages.Common.DomainNotifications;
+using NerdStore.Core.Messages.Common.IntegrationEvents;
 
 namespace NerdStore.Core.Mediator
 {
@@ -25,6 +26,11 @@ namespace NerdStore.Core.Mediator
         }
 
         public async Task PublishDomainEventAsync<TEvent>(TEvent @event) where TEvent : DomainEvent
+        {
+            await _mediator.Publish(@event);
+        }
+
+        public async Task PublishIntegrationEventAsync<TEvent>(TEvent @event) where TEvent : IntegrationEvent
         {
             await _mediator.Publish(@event);
         }

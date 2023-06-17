@@ -179,7 +179,7 @@ namespace NerdStore.WebApp.Mvc.Controllers
             return View(await _orderQuery.GetDraftOrderByClientIdAsync(ClientId));
         }
 
-        [HttpGet("start-order")]
+        [HttpPost("start-order")]
         public async Task<IActionResult> StartOrder(CartPaymentViewModel cartPaymentViewModel)
         {
             var command = new StartOrderCommand(

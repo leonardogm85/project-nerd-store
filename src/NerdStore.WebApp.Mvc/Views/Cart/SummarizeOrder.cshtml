@@ -26,7 +26,7 @@
             <div class="card">
                 <div class="card-header">
                     <h4 class="d-flex justify-content-between align-items-center m-0">
-                        Summary <span class="badge rounded-pill bg-secondary">@Model.Items.Count</span>
+                        Summary <span class="badge rounded-pill bg-secondary">@Model.Items.Count()</span>
                     </h4>
                 </div>
 
@@ -75,33 +75,70 @@
 
                 <div class="col-md-6">
                     <div class="form-floating">
-                        <input asp-for="Payment!.CardHolder" class="form-control" placeholder="Provide a card holder" />
-                        <label asp-for="Payment!.CardHolder">Card Holder</label>
-                        <span asp-validation-for="Payment!.CardHolder" class="text-danger"></span>
+                        <input class="form-control"
+                               type="text"
+                               id="CardHolder"
+                               name="CardHolder"
+                               placeholder="Provide a card holder"
+                               data-val="true"
+                               data-val-required="The card holder must be provided."
+                               data-val-length-min="10"
+                               data-val-length-max="100"
+                               data-val-length="The card holder name must be between 10 and 100 characters."
+                               autofocus />
+                        <label for="CardHolder">Card Holder</label>
+                        <span class="text-danger" data-valmsg-for="CardHolder" data-valmsg-replace="true"></span>
                     </div>
                 </div>
 
                 <div class="col-md-6">
                     <div class="form-floating">
-                        <input asp-for="Payment!.CardNumber" class="form-control" placeholder="Provide a card number" />
-                        <label asp-for="Payment!.CardNumber">Card Number</label>
-                        <span asp-validation-for="Payment!.CardNumber" class="text-danger"></span>
+                        <input class="form-control"
+                               type="text"
+                               id="CardNumber"
+                               name="CardNumber"
+                               placeholder="Provide a card number"
+                               data-val="true"
+                               data-val-required="The card number must be provided."
+                               data-val-length-min="16"
+                               data-val-length-max="16"
+                               data-val-length="The card number must be 16 characters." />
+                        <label for="CardNumber">Card Number</label>
+                        <span class="text-danger" data-valmsg-for="CardNumber" data-valmsg-replace="true"></span>
                     </div>
                 </div>
 
                 <div class="col-md-4">
                     <div class="form-floating">
-                        <input asp-for="Payment!.CardExpiresOn" class="form-control" placeholder="Provide a card expires on" />
-                        <label asp-for="Payment!.CardExpiresOn">Card Expires On</label>
-                        <span asp-validation-for="Payment!.CardExpiresOn" class="text-danger"></span>
+                        <input class="form-control"
+                               type="text"
+                               id="CardExpiresOn"
+                               name="CardExpiresOn"
+                               placeholder="Provide a card expires on"
+                               data-val="true"
+                               data-val-required="The card expires on must be provided."
+                               data-val-length-min="5"
+                               data-val-length-max="5"
+                               data-val-length="The card expires on must be 5 characters." />
+                        <label for="CardExpiresOn">Card Expires On</label>
+                        <span class="text-danger" data-valmsg-for="CardExpiresOn" data-valmsg-replace="true"></span>
                     </div>
                 </div>
 
                 <div class="col-md-3">
                     <div class="form-floating">
-                        <input asp-for="Payment!.CardCvv" class="form-control" placeholder="Provide a card CVV" />
-                        <label asp-for="Payment!.CardCvv">Card CVV</label>
-                        <span asp-validation-for="Payment!.CardCvv" class="text-danger"></span>
+                        <input class="form-control"
+                               type="text"
+                               id="CardCvv"
+                               name="CardCvv"
+                               placeholder="Provide a card CVV"
+                               data-val="true"
+                               data-val-required="The card CVV must be provided."
+                               data-val-length-min="3"
+                               data-val-length-max="3"
+                               data-val-length="The card CVV must be 3 characters." />
+                        <label for="CardCvv">Card CVV</label>
+                        <span class="text-danger" data-valmsg-for="CardCvv" data-valmsg-replace="true"></span>
                     </div>
                 </div>
 
@@ -115,3 +152,10 @@
     }
 
 </div>
+
+@section Scripts
+    {
+    @{
+        await Html.RenderPartialAsync("_ValidationPartial");
+    }
+}

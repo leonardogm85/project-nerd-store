@@ -2,6 +2,7 @@
 {
     public interface IUnitOfWork
     {
+        void Rollback();
         Task<bool> CommitAsync();
     }
 }
