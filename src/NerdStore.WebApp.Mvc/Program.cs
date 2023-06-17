@@ -3,6 +3,7 @@ using NerdStore.Core.Extensions;
 using NerdStore.Orders.Application.Extensions;
 using NerdStore.Payments.Application.Extensions;
 using System.Globalization;
+using EventSourcing.Extensions;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -21,6 +22,7 @@ builder.Services
     .AddRazorRuntimeCompilation();
 
 builder.Services.AddCore();
+builder.Services.AddEventSourcing();
 builder.Services.AddCatalog(connectionString);
 builder.Services.AddOrders(connectionString);
 builder.Services.AddPayments(connectionString);
