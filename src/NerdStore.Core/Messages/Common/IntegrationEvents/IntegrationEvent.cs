@@ -1,14 +1,10 @@
-﻿using MediatR;
-
-namespace NerdStore.Core.Messages.Common.IntegrationEvents
+﻿namespace NerdStore.Core.Messages.Common.IntegrationEvents
 {
-    public abstract class IntegrationEvent : Message, INotification
+    public abstract class IntegrationEvent : Event
     {
-        public DateTime Timestamp { get; }
-
-        protected IntegrationEvent(Guid aggregateId) : base(aggregateId)
+        protected IntegrationEvent(Guid aggregateId)
+            : base(aggregateId)
         {
-            Timestamp = DateTime.UtcNow;
         }
     }
 }

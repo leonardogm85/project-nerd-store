@@ -41,7 +41,7 @@ namespace NerdStore.Payments.Domain.Services
 
                 if (await _paymentRepository.UnitOfWork.CommitAsync())
                 {
-                    await _mediatorHandler.PublishIntegrationEventAsync(new PaymentConfirmedEvent(
+                    await _mediatorHandler.PublishEventAsync(new PaymentConfirmedEvent(
                         payment.OrderId,
                         payment.ClientId,
                         payment.Id,
@@ -53,7 +53,7 @@ namespace NerdStore.Payments.Domain.Services
             {
                 await _mediatorHandler.PublishDomainNotificationAsync(new(nameof(Payment), "Payment rejected."));
 
-                await _mediatorHandler.PublishIntegrationEventAsync(new PaymentRejectedEvent(
+                await _mediatorHandler.PublishEventAsync(new PaymentRejectedEvent(
                     payment.OrderId,
                     payment.ClientId,
                     payment.Id,

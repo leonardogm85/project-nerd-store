@@ -266,7 +266,7 @@ namespace NerdStore.Orders.Application.Commands
 
             if (entitiesSaved)
             {
-                await _mediatorHandler.PublishIntegrationEventAsync(new OrderStartedEvent(
+                await _mediatorHandler.PublishEventAsync(new OrderStartedEvent(
                     order.Id,
                     order.ClientId,
                     order.Total,
@@ -334,7 +334,7 @@ namespace NerdStore.Orders.Application.Commands
 
             if (entitiesSaved)
             {
-                await _mediatorHandler.PublishIntegrationEventAsync(new OrderCanceledEvent(
+                await _mediatorHandler.PublishEventAsync(new OrderCanceledEvent(
                     order.Id,
                     order.ClientId,
                     order.Items.Select(item => new OrderItemDataTransferObject(

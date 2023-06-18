@@ -33,7 +33,7 @@ namespace NerdStore.Catalog.Domain.Events.Handlers
 
             if (await _stockService.RemoveProductsFromStockAsync(products))
             {
-                await _mediatorHandler.PublishIntegrationEventAsync(new OrderStockConfirmedEvent(
+                await _mediatorHandler.PublishEventAsync(new OrderStockConfirmedEvent(
                     @event.OrderId,
                     @event.ClientId,
                     @event.Total,
@@ -45,7 +45,7 @@ namespace NerdStore.Catalog.Domain.Events.Handlers
             }
             else
             {
-                await _mediatorHandler.PublishIntegrationEventAsync(new OrderStockRejectedEvent(
+                await _mediatorHandler.PublishEventAsync(new OrderStockRejectedEvent(
                     @event.OrderId,
                     @event.ClientId));
             }

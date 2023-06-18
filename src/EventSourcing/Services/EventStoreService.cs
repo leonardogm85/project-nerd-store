@@ -6,6 +6,8 @@ namespace EventSourcing.Services
 {
     public sealed class EventStoreService : IEventStoreService
     {
+        // TODO: Dependency Injection of IEventStoreConnection in ServiceCollectionExtensions
+
         private readonly IEventStoreConnection _connection;
 
         public EventStoreService(IConfiguration configuration)

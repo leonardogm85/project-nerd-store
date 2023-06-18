@@ -1,23 +1,27 @@
 ﻿using MediatR;
+using NerdStore.Core.EventSourcing;
 using NerdStore.Core.Messages;
 using NerdStore.Core.Messages.Common.DomainEvents;
 using NerdStore.Core.Messages.Common.DomainNotifications;
-using NerdStore.Core.Messages.Common.IntegrationEvents;
 
 namespace NerdStore.Core.Mediator
 {
     public sealed class MediatorHandler : IMediatorHandler
     {
         private readonly IMediator _mediator;
+        private readonly IEventSourcingRepository _eventSourcingRepository;
 
-        public MediatorHandler(IMediator mediator)
+        public MediatorHandler(IMediator mediator, IEventSourcingRepository eventSourcingRepository)
         {
             _mediator = mediator;
+            _eventSourcingRepository = eventSourcingRepository;
         }
 
         public async Task PublishEventAsync<TEvent>(TEvent @event) where TEvent : Event
         {
             await _mediator.Publish(@event);
+            await _eventSourcingRepository
+                .AddEventAsync(@event);
         }
 
         public async Task<bool> SendCommandAsync<TCommand>(TCommand command) where TCommand : Command
@@ -26,11 +30,6 @@ namespace NerdStore.Core.Mediator
         }
 
         public async Task PublishDomainEventAsync<TEvent>(TEvent @event) where TEvent : DomainEvent
-        {
-            await _mediator.Publish(@event);
-        }
-
-        public async Task PublishIntegrationEventAsync<TEvent>(TEvent @event) where TEvent : IntegrationEvent
         {
             await _mediator.Publish(@event);
         }
