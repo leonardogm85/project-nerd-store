@@ -48,7 +48,7 @@
                                 <div class="input-group">
                                     <input type="number" class="form-control" name="quantity" aria-label="Quantity" aria-describedby="Quantity" value="@item.Quantity" />
                                     <button type="submit" class="btn btn-success">
-                                        <span class="fas fa-sync"></span>
+                                        <i class="fa-solid fa-rotate"></i>
                                     </button>
                                 </div>
                             </form>
@@ -66,7 +66,7 @@
                             <form asp-controller="Cart" asp-action="RemoveItem">
                                 <input type="hidden" name="productId" value="@item.ProductId" />
                                 <button type="submit" class="btn btn-danger">
-                                    <span class="fas fa-trash-alt me-1"></span>Remove
+                                    <i class="fa-solid fa-trash-can"></i> Remove
                                 </button>
                             </form>
                         </td>
@@ -91,7 +91,7 @@
                                 <input type="text" class="form-control" name="VoucherCode" placeholder="Voucher" aria-label="Voucher" aria-describedby="setVoucher"
                                        value="@Model.VoucherCode" />
                                 <button type="submit" class="btn btn-success">
-                                    <span class="fas fa-sync"></span>
+                                    <i class="fa-solid fa-rotate"></i>
                                 </button>
                             </div>
                         </form>
@@ -113,10 +113,10 @@
                 <tr>
                     <td colspan="5" class="text-end">
                         <a asp-controller="Showcase" asp-action="Index" class="btn btn-secondary p-3 mb-1" role="button">
-                            <span class="fa fa-shopping-cart me-1"></span>Keep buying
+                            <i class="fa-solid fa-cart-shopping"></i> Keep buying
                         </a>
                         <a asp-controller="Cart" asp-action="SummarizeOrder" class="btn btn-success p-3 mb-1" role="button">
-                            <span class="fas fa-play me-1"></span>Checkout
+                            <i class="fa-solid fa-play"></i> Checkout
                         </a>
                     </td>
                 </tr>

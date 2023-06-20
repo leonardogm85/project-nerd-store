@@ -1,4 +1,5 @@
-﻿using EventSourcing.Interfaces;
+﻿using EventSourcing.DataTransferObjects;
+using EventSourcing.Interfaces;
 using EventStore.ClientAPI;
 using NerdStore.Core.EventSourcing;
 using NerdStore.Core.Messages;
@@ -26,14 +27,23 @@ namespace EventSourcing.Repositories
 
         public async Task<IEnumerable<StoredEvent>> GetEventsByAggregateIdAsync(Guid aggregateId)
         {
-            var events = await _eventStoreService.GetConnection().ReadStreamEventsBackwardAsync(
+            var slice = await _eventStoreService.GetConnection().ReadStreamEventsForwardAsync(
                 aggregateId.ToString(),
                 0,
                 100,
                 false);
-            // TODO: Implement method
 
-            throw new NotImplementedException();
+            return slice.Events.Select(resolved =>
+            {
+                var serialized = Encoding.Default.GetString(resolved.Event.Data);
+                var deserialized = JsonConvert.DeserializeObject<EventDataTransferObject>(serialized);
+
+                return new StoredEvent(
+                    deserialized!.AggregateId,
+                    deserialized!.MessageType,
+                    deserialized!.Timestamp,
+                    serialized);
+            }).OrderBy(stored => stored.OccurredIn);
         }
 
         public void Dispose()

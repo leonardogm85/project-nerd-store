@@ -43,6 +43,7 @@ namespace NerdStore.Orders.Application.Queries
             var orders = await _orderRepository.GetPaidAndCanceledOrdersByClientIdAsync(clientId);
 
             return orders.Select(order => new OrderViewModel(
+                    order.Id,
                     order.Code,
                     order.Total,
                     (int)order.Status,

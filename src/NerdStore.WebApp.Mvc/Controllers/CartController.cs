@@ -200,7 +200,7 @@ namespace NerdStore.WebApp.Mvc.Controllers
 
             return RedirectToAction(
                 "Index",
-                "Order");
+                "Orders");
         }
     }
 }

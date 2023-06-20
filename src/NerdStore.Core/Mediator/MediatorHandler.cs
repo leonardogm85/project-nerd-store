@@ -17,6 +17,8 @@ namespace NerdStore.Core.Mediator
             _eventSourcingRepository = eventSourcingRepository;
         }
 
+        // TODO: Split Event into ContextEvent and IntegrationEvent
+
         public async Task PublishEventAsync<TEvent>(TEvent @event) where TEvent : Event
         {
             await _mediator.Publish(@event);
@@ -28,6 +30,8 @@ namespace NerdStore.Core.Mediator
         {
             return await _mediator.Send(command);
         }
+
+        // TODO: DomainEvent inherit from Event
 
         public async Task PublishDomainEventAsync<TEvent>(TEvent @event) where TEvent : DomainEvent
         {

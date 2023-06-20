@@ -6,6 +6,12 @@ using NerdStore.Core.Messages.Common.DomainNotifications.Handlers;
 
 namespace NerdStore.WebApp.Mvc.Controllers
 {
+    // TODO: Create Identities Project
+
+    // TODO: Create ControllerBase class for the Client and another for the Employee
+
+    // TODO: Implement Authentication and Authorization with Identity
+
     public abstract class ControllerBase : Controller
     {
         private readonly IMediatorHandler _mediatorHandler;

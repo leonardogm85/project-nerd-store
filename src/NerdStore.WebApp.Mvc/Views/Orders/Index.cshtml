@@ -1,0 +1,59 @@
+﻿@model IEnumerable<OrderViewModel>
+
+@{
+    ViewData["Title"] = "Orders";
+}
+
+<section class="row text-center">
+    <div class="col-md-8 mx-auto">
+        <h1 class="fw-light">Orders</h1>
+    </div>
+</section>
+
+<div class="row g-2 py-3">
+    @if (Model.Any())
+    {
+        <table class="table table-hover">
+            <thead>
+                <tr>
+                    <th scope="col">Code</th>
+                    <th class="text-center" scope="col">Create At</th>
+                    <th class="text-center" scope="col">Status</th>
+                    <th class="text-end" scope="col">Total</th>
+                    <th class="text-end" scope="col">History</th>
+                </tr>
+            </thead>
+            <tbody>
+                @foreach (var order in Model)
+                {
+                    <tr>
+                        <td>@order.Code</td>
+                        <td class="text-center">@order.CreatedAt.ToShortDateString()</td>
+                        <td class="text-center">
+                            @if (order.Status == 3)
+                            {
+                                <span class="badge bg-success p-2">Paid</span>
+                            }
+                            else
+                            {
+                                <span class="badge bg-danger p-2">Canceled</span>
+                            }
+                        </td>
+                        <td class="text-end">@order.Total.ToString("c")</td>
+                        <td class="text-end">
+                            <a asp-controller="Events" asp-action="Index" asp-route-aggregateid="@order.OrderId" class="btn btn-secondary" role="button">
+                                <i class="fa-regular fa-clock"></i>
+                            </a>
+                        </td>
+                    </tr>
+                }
+            </tbody>
+        </table>
+    }
+    else
+    {
+        <div class="alert alert-info" role="alert">
+            You have no orders!
+        </div>
+    }
+</div>

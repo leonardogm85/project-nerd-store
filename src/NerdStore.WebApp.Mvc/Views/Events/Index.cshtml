@@ -1,0 +1,46 @@
+﻿@using NerdStore.Core.EventSourcing;
+
+@model IEnumerable<StoredEvent>
+
+@{
+    ViewData["Title"] = "Events";
+}
+
+<section class="row text-center">
+    <div class="col-md-8 mx-auto">
+        <h1 class="fw-light">Events</h1>
+    </div>
+</section>
+
+<div class="row g-2 py-3">
+    @if (Model.Any())
+    {
+        <table class="table table-hover table-sm">
+            <thead>
+                <tr>
+                    <th scope="col">ID</th>
+                    <th scope="col">Name</th>
+                    <th scope="col">Date</th>
+                    <th scope="col">Data</th>
+                </tr>
+            </thead>
+            <tbody>
+                @foreach (var @event in Model)
+                {
+                    <tr>
+                        <td>@(@event.Id)</td>
+                        <td>@(@event.Type)</td>
+                        <td>@(@event.OccurredIn)</td>
+                        <td class="text-secondary"><small>@(@event.Data)</small></td>
+                    </tr>
+                }
+            </tbody>
+        </table>
+    }
+    else
+    {
+        <div class="alert alert-info" role="alert">
+            Your order has no events!
+        </div>
+    }
+</div>
